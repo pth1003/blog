@@ -1,7 +1,7 @@
 @include('frontend.layout.link')
+<!-- === Header === -->
 @include('frontend.layout.header')
 <style>
-
     *{
         margin: 0;
         padding-right: 0;
@@ -21,6 +21,7 @@
         opacity: 0.7;
     }
 </style>
+<!-- ==== Detail ==== -->
 <div class="detail-post container">
     <div class="row">
         <div class="col-lg-8">
@@ -193,4 +194,6 @@
         </div>
     </div>
 </div>
+
+<!-- == Footer == -->
 @include('frontend.layout.footer')
