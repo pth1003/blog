@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\AdminController;
 Route::prefix('frontend')->group(function () {
    Route::get('/', [UserController::class, 'index'])->name('frontend.index');
    Route::get('/detail', [UserController::class, 'detailPost'])->name('frontend.detail');
+   Route::get('/page', [UserController::class, 'pagePost'])->name('frontend.page');
 });
 
 

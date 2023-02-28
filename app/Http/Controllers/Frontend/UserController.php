@@ -17,6 +17,11 @@ class UserController extends Controller
 
     public function detailPost()
     {
-        return view('frontend.index');
+        return view('frontend.detail');
+    }
+
+    public function pagePost()
+    {
+        return view('frontend.listpage');
     }
 }
