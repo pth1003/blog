@@ -3,24 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\UserController;
 use App\Http\Controllers\Backend\AdminController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 //Front-End
+Route::redirect('/','frontend');
 Route::prefix('frontend')->group(function () {
    Route::get('/', [UserController::class, 'index'])->name('frontend.index');
-   Route::get('/detail', [UserController::class, 'detailPost'])->name('frontend.detail');
-   Route::get('/page', [UserController::class, 'pagePost'])->name('frontend.page');
+   Route::get('/detail/{id}', [UserController::class, 'detailPost'])->name('frontend.detail');
+   Route::post('/detail/{id}', [UserController::class, 'detailPost'])->name('frontend.detail');
+   Route::get('/page/{id}', [UserController::class, 'pagePost'])->name('frontend.page');
+   Route::get('/login', [UserController::class, 'login'])->name('frontend.login');
+   Route::get('/register', [UserController::class, 'register'])->name('frontend.register');
+   Route::get('/error', [UserController::class, 'error'])->name('frontend.error');
+   Route::match(['post', 'get'],'/write', [UserController::class, 'writeBlog'])->name('frontend.write');
 });
-
 
 //Back-End
 Route::prefix('backend')->group(function () {
