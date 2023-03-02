@@ -72,3 +72,15 @@ body {
     font-size: 12px;
     font-weight: bold;
 }
+
+.mbt-2 {
+    margin-bottom: 2px;
+}
+
+.fs-13px {
+    font-size:13px
+}
+
+.p-1-5 {
+    padding: 1px 5px;
+}

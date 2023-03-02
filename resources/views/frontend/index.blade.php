@@ -31,9 +31,9 @@
                     @foreach($posts as $post)
                         <div class="d-flex m-1 position-relative">
                             <div class=" top-50">
-                                <img class="m-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap"
-                                     width="280px"
-                                     height="190px"/>
+                                <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}">
+                                    <img class="m-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap" width="280px" height="190px"/>
+                                </a>
                             </div>
                             <div class="m-lg-3">
                                 <h5 class="card-title fw-bold">
@@ -43,10 +43,10 @@
                                     {{ $post->category->name }}
                                 </div>
                                 <p class="card-text">
-                                    <small class="date-time-post">
-                                        <span>{{ $post->user->name }}</span>
-                                        <span>{{ $dt->toDayDateTimeString() }}</span>
-                                        <span>0 Comment</span>
+                                    <small class="date-time-post d-flex">
+                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-user mbt-2"></i>&nbsp;{{ $post->user->name }}</span>
+                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-calendar-days mbt-2"></i>&nbsp;{{ $post->created_at-> toDayDateTimeString() }}<i class="bi bi-android2"></i></span>
+                                        <span class="d-flex align-items-center"><i class="fa-solid fa-comment"></i>&nbsp;0</span>
                                     </small>
                                 </p>
                                 <p class="card-text fs-6">
@@ -82,80 +82,25 @@
                             </div>
                         </div>
                         <hr class="bg-black">
-                        <div class="bg-black text-light fw-bold m-1 p-1 pdr mr">Suggesst</div>
-                        <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap" width="120px"
-                                 height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold">Tiêu đề ủa bài viết</p>
-                                <p class="card-text text-black">
-                                    <small style="font-size: 12px">
-                                        <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>0 Comment</span>
-                                    </small>
-                                </p>
+                        <div class="bg-black text-light fw-bold m-1 p-1 pdr mr">{{ $catNameRandom }}</div>
+                        @foreach($catRandom as $post)
+                            <div class="d-flex mb-4 mr-1 ml-4px">
+                                <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}">
+                                    <img class="mr-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap" width="120px"
+                                         height="100px">
+                                </a>
+                                <div class="">
+                                    <p class="card-text text-black fw-bold m-0"><a class="text-decoration-none text-black fs-13px" href="{{ route('frontend.detail', ['id'=>$post->id]) }}">{{ $post->title }}</a></p>
+                                    <p class="card-text text-black">
+                                        <small style="font-size: 10px">
+                                            <span>{{ $post->user->name}}</span>
+                                            <span>{{ $post->created_at-> toDayDateTimeString() }}</span>
+                                        </small>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap" width="120px"
-                                 height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold">Tiêu đề ủa bài viết</p>
-                                <p class="card-text text-black">
-                                    <small style="font-size: 12px">
-                                        <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>0 Comment</span>
-                                    </small>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap" width="120px"
-                                 height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold">Tiêu đề ủa bài viết</p>
-                                <p class="card-text text-black">
-                                    <small style="font-size: 12px">
-                                        <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>0 Comment</span>
-                                    </small>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap" width="120px"
-                                 height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold">Tiêu đề ủa bài viết</p>
-                                <p class="card-text text-black">
-                                    <small style="font-size: 12px">
-                                        <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>0 Comment</span>
-                                    </small>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap" width="120px"
-                                 height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold">Tiêu đề ủa bài viết</p>
-                                <p class="card-text text-black">
-                                    <small style="font-size: 12px">
-                                        <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>0 Comment</span>
-                                    </small>
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

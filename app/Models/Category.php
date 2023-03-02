@@ -12,4 +12,9 @@ class Category extends Model
 
     public $table = 'category';
 
+    public function post(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
 }
