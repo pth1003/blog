@@ -84,3 +84,38 @@ body {
 .p-1-5 {
     padding: 1px 5px;
 }
+
+
+.title-post-detail {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.input-comment:focus {
+    outline: none;
+    opacity: 1;
+}
+
+.input-comment {
+    border-color: #ccc;
+    opacity: 0.7;
+}
+
+.img-detail {
+    height: 500px;
+    width: 600px;
+}
+
+@media (min-width: 740px) and (max-width: 1023px) {
+    .img-detail {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 739px) {
+    .img-detail {
+        width: 100%;
+        height: auto;
+    }
+}
