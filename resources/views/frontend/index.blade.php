@@ -44,9 +44,9 @@
                                 </div>
                                 <p class="card-text">
                                     <small class="date-time-post d-flex">
-                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-user mbt-2"></i>&nbsp;{{ $post->user->name }}</span>
-                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-calendar-days mbt-2"></i>&nbsp;{{ $post->created_at-> toDayDateTimeString() }}<i class="bi bi-android2"></i></span>
-                                        <span class="d-flex align-items-center"><i class="fa-solid fa-comment"></i>&nbsp;0</span>
+                                        <span class="d-flex align-items-center mr-1"><i class="bi bi-person-fill"></i>&nbsp;{{ $post->user->name }}</span>
+                                        <span class="d-flex align-items-center mr-1"><i class="bi bi-alarm-fill mbt-2"></i>&nbsp;{{ $post->created_at-> toDayDateTimeString() }}</span>
+                                        <span class="d-flex align-items-center"><i class="bi bi-chat-dots-fill"></i>&nbsp;0</span>
                                     </small>
                                 </p>
                                 <p class="card-text fs-6">
