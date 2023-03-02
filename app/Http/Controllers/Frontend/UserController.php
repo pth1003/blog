@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -61,7 +61,7 @@ class UserController extends Controller
                 foreach ($postDetail as $idCat) {
                     $idCatRelated = $idCat->category_id;
                 }
-                $relatedPost = Post::with('user')->where('category_id', $idCatRelated)->get();
+                $relatedPost = Post::with('user')->where('category_id', $idCatRelated)->where('id', '!=', $id)->get();
                 return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost'));
             } else {
                 $dataInsert = [

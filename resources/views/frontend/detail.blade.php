@@ -1,44 +1,4 @@
 @extends('frontend.layout.layout')
-<style>
-    * {
-        margin: 0;
-        padding-right: 0;
-    }
-
-    .title-post-detail {
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .input-comment:focus {
-        outline: none;
-        opacity: 1;
-    }
-
-    .input-comment {
-        border-color: #ccc;
-        opacity: 0.7;
-    }
-
-    .img-detail {
-        height: 500px;
-        width: 600px;
-    }
-
-    @media (min-width: 740px) and (max-width: 1023px) {
-        .img-detail {
-            width: 100%;
-            height: auto;
-        }
-    }
-
-    @media (max-width: 739px) {
-        .img-detail {
-            width: 100%;
-            height: auto;
-        }
-    }
-</style>
 <!-- ==== Detail ==== -->
 @section('content')
     <div class="detail-post container bg-white">
@@ -64,7 +24,7 @@
                 <!--=== Comment  === -->
                 <div class="comment-post bg-f2 p-2">
                     <p class="fw-bold"><i class="fa-solid fa-comment"></i> Comment ({{ $comments->count() }})</p>
-                    <form method="POST">
+                    <form method="POST" id="form-comment">
                        <div class="d-flex">
                            <input type="text" class="w-100 p-1 input-comment" name="contentt" placeholder="Write comment ..."/>
                            <button class="btn btn-sm btn-success" type="submit">Send</button>
@@ -133,4 +93,8 @@
             </div>
         </div>
     </div>
+    <script>
+        $('#form-comment').validate();
+    </script>
 @endsection
+
