@@ -91,7 +91,7 @@ class UserController extends Controller
             return view('frontend.listpage', compact('listPage', 'nameCat'));
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
-            return redirect()->route('frontend.error' , ['msg' => $e->getMessage()]);
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 

@@ -54,7 +54,7 @@
             title: "required",
         },
 
-        message: {
+        messages: {
             title: "Vui long nhập tiêu đề bài đăng"
         }
     }) ;

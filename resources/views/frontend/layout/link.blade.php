@@ -10,4 +10,5 @@
 <link rel="stylesheet" href="{{asset('asset/css/app.css')}}"/>
 <link rel="stylesheet" href="{{asset('asset/css/responsive.css')}}"/>
 <link rel="stylesheet" href="{{asset('asset/icon/fontawesome-free-6.3.0-web/css/all.css')}}"/>
-
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
