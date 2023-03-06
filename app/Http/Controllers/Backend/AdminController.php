@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -29,10 +31,10 @@ class AdminController extends BaseController
      */
     public function comment($status)
     {
-        $comments = Comment::with('user')->where('status', $status)->simplePaginate(8);
+        $comments = Comment::with('user')->where('status', $status)->simplePaginate(10);
         $idStatus = 0;
-        foreach ($comments as $status){
-           $idStatus = $status->status;
+        foreach ($comments as $status) {
+            $idStatus = $status->status;
         }
         return view('backend.comment', compact('comments', 'idStatus'));
     }
@@ -45,12 +47,12 @@ class AdminController extends BaseController
     public function handleComment($id)
     {
         $url = substr(url()->current(), -3);
-        if($url == 'del'){
+        if ($url == 'del') {
             Comment::find($id)->delete();
-            return redirect()->route('backend.comment.list', ['status'=>1]);
+            return redirect()->route('backend.comment.list', ['status' => 1]);
         } else {
-            Comment::where('id', $id)->update(['status'=>1]);
-            return redirect()->route('backend.comment.list', ['status'=>1]);
+            Comment::where('id', $id)->update(['status' => 1]);
+            return redirect()->route('backend.comment.list', ['status' => 1]);
         }
     }
 
@@ -60,11 +62,11 @@ class AdminController extends BaseController
      */
     public function confirmAllComment()
     {
-       $comment = Comment::all();
-       foreach ($comment as $status){
-           Comment::where('id', $status->id)->update(['status'=>1]);
-       }
-       return redirect()->route('backend.comment.list', ['status'=>1]);
+        $comment = Comment::all();
+        foreach ($comment as $status) {
+            Comment::where('id', $status->id)->update(['status' => 1]);
+        }
+        return redirect()->route('backend.comment.list', ['status' => 1]);
     }
 
     /**
@@ -74,12 +76,43 @@ class AdminController extends BaseController
     {
         $category = Category::all();
         $nameCategory = 'All';
-        if($id == 'all'){
+        if ($id == 'all') {
             $posts = Post::with('user', 'category')->get();
         } else {
             $nameCategory = Category::find($id)->name;
             $posts = Post::with('user', 'category')->where('category_id', $id)->get();
         }
         return view('backend.posts', compact('posts', 'category', 'nameCategory'));
+    }
+
+    public function listUser()
+    {
+        $listUser = User::all();
+        return view('backend.users.list', compact('listUser'));
+    }
+
+    public function editUser(Request $request, $id)
+    {
+        if ($request->method() == 'GET') {
+            $userEdit = User::find($id);
+            return view('backend.users.edit', compact('userEdit'));
+        } else {
+            $dataUpdate = [
+                'name' => $request->fullName,
+                'username' => $request->username,
+                'email' => $request->email
+            ];
+            User::where('id', $id)->update($dataUpdate);
+            return redirect()->route('backend.listUser');
+        }
+    }
+
+    public function createUser(Request $request)
+    {
+        if($request->method() == 'GET'){
+            return view('backend.users.create');
+        } else {
+            return 123;
+        }
     }
 }

@@ -1,21 +1,22 @@
 @extends('backend.layout')
 @section('posts')
-    <div class="posts container-fluid bg-white mt-4">
-        <div class="d-flex align-items-center">
-            <h5 class="fw-bold p-2 m-0">Posts list - <span class="text-success">{{ $nameCategory }}</span></h5>
-            <div class="dropdown">
-                <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Category
-                </button>
-                <div class="dropdown-menu bg-white p-3 " aria-labelledby="dropdownMenuButton">
-                    @foreach($category as $cat)
-                        <a class="d-block text-decoration-none text-black link-a"
-                           href="{{ route('backend.post.list',['id'=>$cat->id]) }}">{{ $cat->name}}</a>
-                    @endforeach
-                </div>
+    <p>Dashboard / Post</p>
+    <div class="d-flex align-items-center">
+        <h5 class="fw-bold m-0"><i class="bi bi-stickies fs-2 text-warning"></i> Posts list - <span class="text-success">{{ $nameCategory }}</span></h5>
+        <div class="dropdown p-2">
+            <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="bi bi-tags"></i> Category
+            </button>
+            <div class="dropdown-menu bg-white p-3 " aria-labelledby="dropdownMenuButton">
+                @foreach($category as $cat)
+                    <a class="d-block text-decoration-none text-black link-a"
+                       href="{{ route('backend.post.list',['id'=>$cat->id]) }}">{{ $cat->name}}</a>
+                @endforeach
             </div>
         </div>
+    </div>
+    <div class="posts container-fluid bg-white mt-1">
         <table class="table fs-13px">
             <thead>
             <tr>

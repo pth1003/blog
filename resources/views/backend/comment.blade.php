@@ -5,20 +5,21 @@
             font-size: 13px;
         }
     </style>
-    <div class="comment p-3 mt-5 bg-white">
-        <div class="d-flex align-items-center justify-content-between w-30">
-            <h5> List comment -
-                <span class="text-success">
-                        @if ($idStatus == 1)
-                        Solved
-                    @else
-                        Pending
-                    @endif
-                </span>
-            </h5>
-            <a class="btn btn-success btn-sm" href="{{ route('backend.comment.list', ['status'=>0]) }}">Pending</a>
-            <a class="btn btn-warning btn-sm" href="{{ route('backend.comment.list', ['status'=>1]) }}">Solved</a>
-        </div>
+    <p>Dashboard / Comment</p>
+    <div class="d-flex align-items-center justify-content-between w-30">
+        <h5 class="fw-bold"> <i class="bi bi-chat-dots-fill fs-2 text-danger"></i> Comment List -
+            <span class="text-success">
+                @if ($idStatus == 1)
+                    Solved
+                @else
+                    Pending
+                @endif
+            </span>
+        </h5>
+        <a class="btn btn-success btn-sm" href="{{ route('backend.comment.list', ['status'=>0]) }}">Pending <i class="bi bi-hourglass-bottom"></i></a>
+        <a class="btn btn-warning btn-sm text-white" href="{{ route('backend.comment.list', ['status'=>1]) }}">Solved <i class="bi bi-cloud-check-fill"></i></a>
+    </div>
+    <div class="comment p-3 mt-2 bg-white">
         @if($comments->count() > 0)
             <table class="table text-left fs-13px">
                 <thead>
