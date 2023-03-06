@@ -56,7 +56,7 @@ class UserController extends Controller
     {
         try {
             if ($request->method() == 'GET') {
-                $comments = Comment::with('user')->where('post_id', $id)->get();
+                $comments = Comment::with('user')->where('post_id', $id)->where('status', 1)->get();
                 $postDetail = Post::with('user')->where('id', $id)->get();
                 foreach ($postDetail as $idCat) {
                     $idCatRelated = $idCat->category_id;
@@ -91,18 +91,8 @@ class UserController extends Controller
             return view('frontend.listpage', compact('listPage', 'nameCat'));
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
-            return redirect()->route('frontend.error' , ['msg' => $e->getMessage()]);
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
-    }
-
-    public function login()
-    {
-        return view('frontend.login');
-    }
-
-    public function register()
-    {
-        return view('frontend.register');
     }
 
     public function writeBlog(Request $request)

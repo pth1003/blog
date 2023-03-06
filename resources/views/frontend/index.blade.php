@@ -2,6 +2,8 @@
 @section('content')
     <div class="content">
         <div class="container">
+            <h1>
+            </h1>
             <div class="container-content-hot row mt-1 mb-1">
                 <div class="text-light col-lg-8 position-relative p-0">
                     <a href="{{ route('frontend.detail', ['id'=>$newPosts->id]) }}">

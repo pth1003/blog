@@ -11,6 +11,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+//use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Hash;
+use Hash;
+use Auth;
+
 class AdminController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
@@ -85,6 +90,7 @@ class AdminController extends BaseController
         return view('backend.posts', compact('posts', 'category', 'nameCategory'));
     }
 
+
     public function listUser()
     {
         $listUser = User::all();
@@ -114,5 +120,79 @@ class AdminController extends BaseController
         } else {
             return 123;
         }
+
+    /**
+     * checkUser: check user exits
+     * dataInsert: insert user into database
+     * method GET: return view Form Register
+     * method POST: return handle Register
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function handleRegister(Request $request)
+    {
+        if ($request->method() == 'GET') {
+            return view('frontend.register');
+        } else {
+            $checkUsername = User::where('username', $request->username)->first();
+            $checkEmail = User::where('email', $request->email)->first();
+            if($checkUsername != null || $checkEmail != null){
+                return view('frontend.register')->with('msg', 'Username or email already exists');
+            }
+            $dataInsert = [
+                'name' => $request->fullname,
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'email' => $request->email,
+            ];
+            User::create($dataInsert);
+            return redirect()->route('frontend.index');
+        }
+    }
+
+    /**
+     * method POST: return handle Login
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|string
+     */
+    public function handleLogin(Request $request)
+    {
+//        $request->validate([
+//            'username' => 'required',
+//            'password' => 'required|min:6'
+//        ],
+//            [
+//                'username.required' => 'Please enter your username',
+//                'password.required' => 'Please enter your password',
+//                'password.min' => 'Password has minimum 6 character'
+//            ]);
+        $dataLogin = $request->only('username', 'password');
+        $login = Auth::attempt($dataLogin);
+        if ($login) {
+            return redirect()->route('frontend.index');
+        }
+        return view('frontend.login')->with('msg', 'Username or password is incorrect');
+    }
+
+    /**
+     * return view form login
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function formLogin()
+    {
+        return view('frontend.login');
+    }
+
+    /**
+     * Logout
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('frontend.index');
     }
 }

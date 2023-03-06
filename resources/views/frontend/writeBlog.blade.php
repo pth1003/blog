@@ -16,6 +16,11 @@
         .input-post-blog:focus, .text-area-blog:focus {
             border-color: #198754;
         }
+
+        .error {
+            color:red;
+            font-weight: bold;
+        }
     </style>
     <div class="container">
         <p class="fw-bold fs-1 text-center">Write Blog</p>
@@ -46,16 +51,27 @@
             @csrf
         </form>
     </div>
+    <script>
+        $('#form-write').validate({
+            rules: {
+                title: "required",
+                contentt: "required",
+                image: {
+                    required: true,
+                    extension: "jpg, jpeg, png"
+                },
+            },
+
+            messages: {
+                title: "Please enter title",
+                contentt: "Please enter content",
+                image: {
+                    required: "Please select image",
+                    extension: "Please select image have type JPG, JPEG, PNG",
+                }
+            }
+        }) ;
+    </script>
 @endsection
 
-<script>
-    $('#form-write').validate({
-        rules: {
-            title: "required",
-        },
 
-        message: {
-            title: "Vui long nhập tiêu đề bài đăng"
-        }
-    }) ;
-</script>
