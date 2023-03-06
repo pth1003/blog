@@ -55,10 +55,14 @@
         $('#form-write').validate({
             rules: {
                 title: "required",
+                contentt: "required",
+                image: "required",
             },
 
             messages: {
-                title: "Vui long nhập tiêu đề bài đăng"
+                title: "Please enter title",
+                contentt: "Please enter content",
+                image: "Please select image"
             }
         }) ;
     </script>
