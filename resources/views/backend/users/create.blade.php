@@ -30,11 +30,14 @@
                 <input type="password" class="form-control" id="rePassword" name="rePassword">
             </div>
             <button type="submit" class="btn btn-success w-25">Create <i class="bi bi-send"></i></button>
-            <a href="" class="btn w-25 bg-dark text-white text-decoration-none">Back <i
+            <a href="{{ route('backend.listUser') }}" class="btn w-25 bg-dark text-white text-decoration-none">Back <i
                     class=" bi bi-arrow-return-left"></i></a>
             </button>
             @csrf
         </form>
+        @if(isset($msg))
+            <p style="background-color: #f1d0d0" class="alert-danger p-2 text-danger text-center fw-bold w-50">{{ $msg }}</p>
+        @endif
     </div>
     <script>
         $('#form-create').validate({

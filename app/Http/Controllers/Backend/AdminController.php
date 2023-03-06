@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-
-//use Illuminate\Support\Facades\Auth;
-//use Illuminate\Support\Facades\Hash;
 use Hash;
 use Auth;
 
@@ -54,7 +51,7 @@ class AdminController extends BaseController
         $url = substr(url()->current(), -3);
         if ($url == 'del') {
             Comment::find($id)->delete();
-            return redirect()->route('backend.comment.list', ['status' => 1]);
+            return redirect()->route('backend.comment.list', ['status' => 0]);
         } else {
             Comment::where('id', $id)->update(['status' => 1]);
             return redirect()->route('backend.comment.list', ['status' => 1]);
@@ -75,6 +72,7 @@ class AdminController extends BaseController
     }
 
     /**
+     * return list post
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function postManagement($id)
@@ -90,13 +88,21 @@ class AdminController extends BaseController
         return view('backend.posts', compact('posts', 'category', 'nameCategory'));
     }
 
-
+    /**
+     * return list user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function listUser()
     {
         $listUser = User::all();
         return view('backend.users.list', compact('listUser'));
     }
 
+    /**
+     * @param Request $request
+     * @param $id get id user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function editUser(Request $request, $id)
     {
         if ($request->method() == 'GET') {
@@ -113,12 +119,29 @@ class AdminController extends BaseController
         }
     }
 
+    /**
+     * Create user
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|int
+     */
     public function createUser(Request $request)
     {
         if ($request->method() == 'GET') {
             return view('backend.users.create');
         } else {
-            return 123;
+            $checkUsername = User::where('username', $request->username)->first();
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkUsername != null || $checkEmail != null) {
+                return view('backend.users.create')->with('msg', 'Username or email already exists');
+            }
+            $dataInsert = [
+                'name' => $request->fullName,
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'email' => $request->email,
+            ];
+            User::create($dataInsert);
+            return redirect()->route('backend.listUserk');
         }
     }
 
@@ -137,7 +160,7 @@ class AdminController extends BaseController
         } else {
             $checkUsername = User::where('username', $request->username)->first();
             $checkEmail = User::where('email', $request->email)->first();
-            if($checkUsername != null || $checkEmail != null){
+            if ($checkUsername != null || $checkEmail != null) {
                 return view('frontend.register')->with('msg', 'Username or email already exists');
             }
             $dataInsert = [
@@ -158,15 +181,6 @@ class AdminController extends BaseController
      */
     public function handleLogin(Request $request)
     {
-//        $request->validate([
-//            'username' => 'required',
-//            'password' => 'required|min:6'
-//        ],
-//            [
-//                'username.required' => 'Please enter your username',
-//                'password.required' => 'Please enter your password',
-//                'password.min' => 'Password has minimum 6 character'
-//            ]);
         $dataLogin = $request->only('username', 'password');
         $login = Auth::attempt($dataLogin);
         if ($login) {
