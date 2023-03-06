@@ -10,3 +10,4 @@
 <link rel="stylesheet" href="{{asset('asset/css/app.css')}}"/>
 <link rel="stylesheet" href="{{asset('asset/css/responsive.css')}}"/>
 <link rel="stylesheet" href="{{asset('asset/icon/fontawesome-free-6.3.0-web/css/all.css')}}"/>
+

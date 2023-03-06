@@ -3,12 +3,12 @@
     <div class="content">
         <div class="container">
             <div class="container-content-hot row mt-1 mb-1">
-                    <div class="text-light col-lg-8 position-relative p-0">
-                        <a href="{{ route('frontend.detail', ['id'=>$newPosts->id]) }}">
-                            <img class="w-100 my-img" src="{{asset('/image/'.$newPosts['image'])}}" alt="lỗi"/>
-                        </a>
-                        <h2 class="position-absolute bottom-0 title-category fw-bold">{{ $newPosts['title'] }}</h2>
-                    </div>
+                <div class="text-light col-lg-8 position-relative p-0">
+                    <a href="{{ route('frontend.detail', ['id'=>$newPosts->id]) }}">
+                        <img class="w-100 my-img" src="{{asset('/image/'.$newPosts['image'])}}" alt="lỗi"/>
+                    </a>
+                    <h2 class="position-absolute bottom-0 title-category fw-bold">{{ $newPosts['title'] }}</h2>
+                </div>
                 <div class="col-lg-4 p-0">
                     <div class="text-light position-relative">
                         <img class="my-img1 mb" src="{{URL::asset('/image/img.jpg')}}" alt="lỗi"/>
@@ -32,21 +32,24 @@
                         <div class="d-flex m-1 position-relative">
                             <div class=" top-50">
                                 <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}">
-                                    <img class="m-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap" width="280px" height="190px"/>
+                                    <img class="m-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap"
+                                         width="280px" height="190px"/>
                                 </a>
                             </div>
                             <div class="m-lg-3">
                                 <h5 class="card-title fw-bold">
-                                    <a class="text-decoration-none text-black" href="{{ route('frontend.detail', ['id'=>$post->id]) }}">{{ $post->title }}</a>
+                                    <a class="text-decoration-none text-black"
+                                       href="{{ route('frontend.detail', ['id'=>$post->id]) }}">{{ $post->title }}</a>
                                 </h5>
                                 <div class="bg-danger text-light d-inline-block position-absolute category">
                                     {{ $post->category->name }}
                                 </div>
                                 <p class="card-text">
                                     <small class="date-time-post d-flex">
-                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-user mbt-2"></i>&nbsp;{{ $post->user->name }}</span>
-                                        <span class="d-flex align-items-center mr-1"><i class="fa-solid fa-calendar-days mbt-2"></i>&nbsp;{{ $post->created_at-> toDayDateTimeString() }}<i class="bi bi-android2"></i></span>
-                                        <span class="d-flex align-items-center"><i class="fa-solid fa-comment"></i>&nbsp;0</span>
+                                        <span class="d-flex align-items-center mr-1"><i class="bi bi-person-fill"></i>&nbsp;{{ $post->user->name }}</span>
+                                        <span class="d-flex align-items-center mr-1"><i
+                                                class="bi bi-alarm-fill mbt-2"></i>&nbsp;{{ $post->created_at-> toDayDateTimeString() }}</span>
+                                        <span class="d-flex align-items-center"><i class="bi bi-chat-dots-fill"></i>&nbsp;0</span>
                                     </small>
                                 </p>
                                 <p class="card-text fs-6">
@@ -86,11 +89,15 @@
                         @foreach($catRandom as $post)
                             <div class="d-flex mb-4 mr-1 ml-4px">
                                 <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}">
-                                    <img class="mr-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap" width="120px"
+                                    <img class="mr-1" src="{{asset('/image/'.$post->image)}}" alt="Card image cap"
+                                         width="120px"
                                          height="100px">
                                 </a>
                                 <div class="">
-                                    <p class="card-text text-black fw-bold m-0"><a class="text-decoration-none text-black fs-13px" href="{{ route('frontend.detail', ['id'=>$post->id]) }}">{{ $post->title }}</a></p>
+                                    <p class="card-text text-black fw-bold m-0"><a
+                                            class="text-decoration-none text-black fs-13px"
+                                            href="{{ route('frontend.detail', ['id'=>$post->id]) }}">{{ $post->title }}</a>
+                                    </p>
                                     <p class="card-text text-black">
                                         <small style="font-size: 10px">
                                             <span>{{ $post->user->name}}</span>
@@ -99,7 +106,7 @@
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                    </div>
                     @endforeach
                 </div>
             </div>
