@@ -19,8 +19,7 @@ class AdminController extends BaseController
      */
     public function index()
     {
-        $countPost = Post::all()->count();
-        return view('backend.index', compact('countPost'));
+        return view('backend.index');
     }
 
     /**

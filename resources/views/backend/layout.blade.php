@@ -39,20 +39,12 @@
                     </a>
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active" aria-current="page">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#home"/>
-                                </svg>
-                                Home
-                            </a>
-                        </li>
                         <li>
                             <a href="#" class="nav-link text-white">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#speedometer2"/>
                                 </svg>
-                                Dashboard
+                                <i class="bi bi-house"></i> Dashboard
                             </a>
                         </li>
                         <li>
@@ -60,7 +52,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#table"/>
                                 </svg>
-                                Comment
+                                <i class="bi bi-chat"></i> Comment
                             </a>
                         </li>
                         <li>
@@ -68,7 +60,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#grid"/>
                                 </svg>
-                                Posts
+                                <i class="bi bi-file-post"></i> Posts
                             </a>
                         </li>
                         <li>
@@ -76,7 +68,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#people-circle"/>
                                 </svg>
-                                Customers
+                                <i class="bi bi-person"></i> User
                             </a>
                         </li>
                     </ul>
@@ -94,7 +86,7 @@
                             <i class="bi bi-newspaper fs-1 text-primary"></i>
                             <div class="">
                                 <p class="m-0 p-0 fs-4 fw-bold text-primary">Post</p>
-                                <p class="m-0 p-0 fs-5">@yield('countPost')</p>
+                                <p class="m-0 p-0 fs-5">{{ countPost() }}</p>
                             </div>
                         </div>
 
@@ -102,7 +94,7 @@
                             <i class="bi bi-people fs-1 text-danger"></i>
                             <div class="">
                                 <p class="m-0 p-0 fs-4 fw-bold text-primary">User</p>
-                                <p class="m-0 p-0 fs-5">124</p>
+                                <p class="m-0 p-0 fs-5">{{ countUser() }}</p>
                             </div>
                         </div>
 
@@ -110,7 +102,7 @@
                             <i class="bi bi-app fs-1 text-success"></i>
                             <div class="">
                                 <p class="m-0 p-0 fs-4 fw-bold text-primary">Category</p>
-                                <p class="m-0 p-0 fs-5">124</p>
+                                <p class="m-0 p-0 fs-5">{{ countCategory() }}</p>
                             </div>
                         </div>
                     </div>
