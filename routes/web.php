@@ -17,7 +17,7 @@ Route::prefix('frontend')->group(function () {
 
 //Back-End
 Route::prefix('backend')->group(function () {
-    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/', [AdminController::class, 'index'])->name('backend.index');
     Route::prefix('comment')->group(function () {
         Route::get('/{status}', [AdminController::class, 'comment'])->name('backend.comment.list');
         Route::get('/handle/{id}/del', [AdminController::class, 'handleComment'])->name('backend.comment.del');
@@ -32,6 +32,12 @@ Route::prefix('backend')->group(function () {
 
     Route::prefix('post')->group(function() {
         Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list');
+    });
+
+    Route::prefix('user')->group(function () {
+       Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser');
+       Route::match(['post','get'],'/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser');
+       Route::match(['post','get'],'/create', [AdminController::class, 'createUser'])->name('backend.createUser');
     });
 });
 

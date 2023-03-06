@@ -36,7 +36,7 @@ class AdminController extends BaseController
      */
     public function comment($status)
     {
-        $comments = Comment::with('user')->where('status', $status)->simplePaginate(8);
+        $comments = Comment::with('user')->where('status', $status)->simplePaginate(10);
         $idStatus = 0;
         foreach ($comments as $status) {
             $idStatus = $status->status;
@@ -90,6 +90,36 @@ class AdminController extends BaseController
         return view('backend.posts', compact('posts', 'category', 'nameCategory'));
     }
 
+
+    public function listUser()
+    {
+        $listUser = User::all();
+        return view('backend.users.list', compact('listUser'));
+    }
+
+    public function editUser(Request $request, $id)
+    {
+        if ($request->method() == 'GET') {
+            $userEdit = User::find($id);
+            return view('backend.users.edit', compact('userEdit'));
+        } else {
+            $dataUpdate = [
+                'name' => $request->fullName,
+                'username' => $request->username,
+                'email' => $request->email
+            ];
+            User::where('id', $id)->update($dataUpdate);
+            return redirect()->route('backend.listUser');
+        }
+    }
+
+    public function createUser(Request $request)
+    {
+        if($request->method() == 'GET'){
+            return view('backend.users.create');
+        } else {
+            return 123;
+        }
 
     /**
      * checkUser: check user exits
