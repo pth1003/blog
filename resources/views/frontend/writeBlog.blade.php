@@ -16,6 +16,11 @@
         .input-post-blog:focus, .text-area-blog:focus {
             border-color: #198754;
         }
+
+        .error {
+            color:red;
+            font-weight: bold;
+        }
     </style>
     <div class="container">
         <p class="fw-bold fs-1 text-center">Write Blog</p>
@@ -46,16 +51,17 @@
             @csrf
         </form>
     </div>
+    <script>
+        $('#form-write').validate({
+            rules: {
+                title: "required",
+            },
+
+            messages: {
+                title: "Vui long nhập tiêu đề bài đăng"
+            }
+        }) ;
+    </script>
 @endsection
 
-<script>
-    $('#form-write').validate({
-        rules: {
-            title: "required",
-        },
 
-        messages: {
-            title: "Vui long nhập tiêu đề bài đăng"
-        }
-    }) ;
-</script>
