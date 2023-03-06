@@ -56,13 +56,19 @@
             rules: {
                 title: "required",
                 contentt: "required",
-                image: "required",
+                image: {
+                    required: true,
+                    extension: "jpg, jpeg, png"
+                },
             },
 
             messages: {
                 title: "Please enter title",
                 contentt: "Please enter content",
-                image: "Please select image"
+                image: {
+                    required: "Please select image",
+                    extension: "Please select image have type JPG, JPEG, PNG",
+                }
             }
         }) ;
     </script>

@@ -25,7 +25,8 @@ Route::prefix('backend')->group(function () {
         Route::get('/handle/confirm', [AdminController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
     });
 
-    Route::match(['get','post'],'/login', [AdminController::class, 'handleLogin'])->name('backend.login');
+    Route::post('/login', [AdminController::class, 'handleLogin'])->name('backend.login');
+    Route::get('/login', [AdminController::class, 'formLogin'])->name('backend.loginForm');
     Route::match(['get','post'],'/register', [AdminController::class, 'handleRegister'])->name('backend.register');
     Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
 

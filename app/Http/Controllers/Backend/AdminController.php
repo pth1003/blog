@@ -92,6 +92,8 @@ class AdminController extends BaseController
 
 
     /**
+     * checkUser: check user exits
+     * dataInsert: insert user into database
      * method GET: return view Form Register
      * method POST: return handle Register
      * @param Request $request
@@ -102,6 +104,11 @@ class AdminController extends BaseController
         if ($request->method() == 'GET') {
             return view('frontend.register');
         } else {
+            $checkUsername = User::where('username', $request->username)->first();
+            $checkEmail = User::where('email', $request->email)->first();
+            if($checkUsername != null || $checkEmail != null){
+                return view('frontend.register')->with('msg', 'Username or email already exists');
+            }
             $dataInsert = [
                 'name' => $request->fullname,
                 'username' => $request->username,
@@ -114,35 +121,43 @@ class AdminController extends BaseController
     }
 
     /**
-     * method GET: return view Form Login
      * method POST: return handle Login
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|string
      */
     public function handleLogin(Request $request)
     {
-        if ($request->method() == 'GET') {
-            return view('frontend.login');
-        } else {
-            $request->validate([
-                'username' => 'required',
-                'password' => 'required|min:6'
-            ],
-            [
-                'username.required'=>'Please enter your username',
-                'password.required'=>'Please enter your password',
-                'password.min'=>'Password has minimum 6 character'
-            ]);
-
-            $dataLogin = $request->only('username', 'password');
-            $login = Auth::attempt($dataLogin);
-            if ($login) {
-                return redirect()->route('frontend.index');
-            }
-            return view('frontend.login')->with(['msg'=>'Error']);
+//        $request->validate([
+//            'username' => 'required',
+//            'password' => 'required|min:6'
+//        ],
+//            [
+//                'username.required' => 'Please enter your username',
+//                'password.required' => 'Please enter your password',
+//                'password.min' => 'Password has minimum 6 character'
+//            ]);
+        $dataLogin = $request->only('username', 'password');
+        $login = Auth::attempt($dataLogin);
+        if ($login) {
+            return redirect()->route('frontend.index');
         }
+        return view('frontend.login')->with('msg', 'Username or password is incorrect');
     }
 
+    /**
+     * return view form login
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function formLogin()
+    {
+        return view('frontend.login');
+    }
+
+    /**
+     * Logout
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout(Request $request)
     {
         Auth::logout();

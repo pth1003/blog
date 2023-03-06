@@ -4,6 +4,7 @@
     <div class="detail-post container bg-white">
         <div class="row">
             <div class="col-lg-8">
+                <!--=== Post Detail ===-->
                 @foreach($postDetail as $post)
                     <div>
                         <img class="img-detail" src="{{ asset('/image/'.$post->image) }}">
@@ -20,16 +21,20 @@
                         {{ $post->content }}
                     </p>
                 @endforeach
+                <!--=== End Post Detail ===-->
 
                 <!--=== Comment  === -->
-                <div class="comment-post bg-f2 p-2">
-                    <p class="fw-bold"><i class="fa-solid fa-comment"></i> Comment ({{ $comments->count() }})</p>
+                <div class="comment-post p-2">
+                    <p class="fw-bold"><i class="bi bi-chat-fill"></i> Comment ({{ $comments->count() }})</p>
                     <form method="POST" id="form-comment">
-                       <div class="d-flex">
-                           <input type="text" class="w-100 p-1 input-comment" name="contentt" placeholder="Write comment ..."/>
-                           <button class="btn btn-sm btn-success" type="submit">Send</button>
-                           @csrf
-                       </div>
+                        @if(isset(Auth::user()->name))
+                            <div class="d-flex">
+                                <input type="text" class="w-100 p-1 input-comment" name="contentt"
+                                       placeholder="Write comment ..."/>
+                                <button class="btn btn-sm btn-success" type="submit">Send</button>
+                                @csrf
+                            </div>
+                        @endif
                     </form>
                     @foreach($comments as $comment)
                         <div class="user-comment mt">
@@ -45,8 +50,9 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="bg-black text-light fw-bold m-2 p-1 pdr mr">Suggesst</div>
+                <div class="bg-black text-light fw-bold m-2 p-1 pdr mr">Suggest</div>
                 <div class="text-light fw-bold">
+                    <!--=== Post Suggest===-->
                     <div class="d-flex flex-column m-1 position-relative">
                         <div class="img-card">
                             <img class="m-1" src="{{URL::asset('/image/img3.jpg')}}" alt="Card image cap"
@@ -67,6 +73,7 @@
                                 lead-in to additional content. This content is a little bit longer.</p>
                         </div>
                     </div>
+                    <!--===End Post Suggest===-->
 
                     <!-- == Related Posts == -->
                     <hr class="bg-black">
@@ -75,10 +82,13 @@
                     </div>
                     @foreach($relatedPost as $post)
                         <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/'.$post->image)}}" alt="Card image cap" width="120px"
+                            <img class="mr-1" src="{{URL::asset('/image/'.$post->image)}}" alt="Card image cap"
+                                 width="120px"
                                  height="100px">
-                            <div class="">
-                                <p class="card-text text-black fw-bold m-0"><a class="text-decoration-none text-black fs-13px" href="">{{ $post->title }}</a></p>
+                            <div>
+                                <p class="card-text text-black fw-bold m-0">
+                                    <a class="text-decoration-none text-black fs-13px" href="">{{ $post->title }}</a>
+                                </p>
                                 <p class="text-white fs-13px bg-danger d-inline-block p-1-5 m-0">{{ $post->category->name }}</p>
                                 <p class="card-text text-black">
                                     <small style="font-size: 12px">
@@ -89,6 +99,7 @@
                             </div>
                         </div>
                     @endforeach
+                    <!--=== End Related post===-->
                 </div>
             </div>
         </div>

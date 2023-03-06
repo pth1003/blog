@@ -60,15 +60,17 @@
                 <input class="mt-3 fw-bold" type="password" id="rePassword" name="rePassword" placeholder="Retype Password"/>
             </div>
             <div class="login">
-                <input class="mt-3 fw-bold" type="text" id="email" name="email" placeholder="Email"/>
+                <input class="mt-3 fw-bold" type="email" id="email" name="email" placeholder="Email"/>
             </div>
             <button type="submit" class="btn-success w-100 border-0 mt-5 p-1 radius-bor-3">Register</button>
         </fieldset>
         @csrf
     </form>
+
     @if(isset($msg))
-        {{$msg}}
+        <p class="alert-danger p-2 text-danger w-100 text-center fw-bold">{{ $msg }}</p>
     @endif
+
 </div>
 
 <script>
@@ -84,7 +86,10 @@
                 required:true,
                 equalTo: "#password"
             },
-            email: "required"
+            email: {
+                required:true,
+                email:true
+            }
         },
         messages: {
             fullname: "Please enter your full name",
@@ -94,6 +99,7 @@
             rePassword: "Please confirm your password",
             rePassword: "2 passwords must be the same",
             email: "Please enter your email",
+            email: "Please enter a valid email address",
         }
     })
 </script>

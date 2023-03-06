@@ -56,8 +56,10 @@
         <p class="mt-4 text-center">Do not have an account? <span><a href="#">Sign in</a></span></p>
         @csrf
     </form>
+    @if(isset($msg))
+        <p class="alert-danger p-2 text-danger w-100 text-center fw-bold">{{ $msg }}</p>
+    @endif
 </div>
-
 <script>
     $('#form-login').validate({
         rules: {
