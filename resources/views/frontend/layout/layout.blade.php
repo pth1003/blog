@@ -24,7 +24,7 @@
 
     <title>Index</title>
     <style>
-        .w-30 {
+        .w-30{
             width: 30%;
         }
     </style>
