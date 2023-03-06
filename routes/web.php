@@ -11,8 +11,6 @@ Route::prefix('frontend')->group(function () {
     Route::get('/detail/{id}', [UserController::class, 'detailPost'])->name('frontend.detail');
     Route::post('/detail/{id}', [UserController::class, 'detailPost'])->name('frontend.detail');
     Route::get('/page/{id}', [UserController::class, 'pagePost'])->name('frontend.page');
-    Route::get('/login', [UserController::class, 'login'])->name('frontend.login');
-    Route::get('/register', [UserController::class, 'register'])->name('frontend.register');
     Route::get('/error', [UserController::class, 'error'])->name('frontend.error');
     Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write');
 });
@@ -26,6 +24,11 @@ Route::prefix('backend')->group(function () {
         Route::get('/handle/{id}/update', [AdminController::class, 'handleComment'])->name('backend.comment.update');
         Route::get('/handle/confirm', [AdminController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
     });
+
+    Route::post('/login', [AdminController::class, 'handleLogin'])->name('backend.login');
+    Route::get('/login', [AdminController::class, 'formLogin'])->name('backend.loginForm');
+    Route::match(['get','post'],'/register', [AdminController::class, 'handleRegister'])->name('backend.register');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
 
     Route::prefix('post')->group(function() {
         Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list');
