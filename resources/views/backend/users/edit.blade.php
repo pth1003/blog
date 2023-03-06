@@ -16,7 +16,7 @@
                 <input type="text" class="form-control" id="email" name="email" value="{{ $userEdit['email'] }}">
             </div>
             <button type="submit" class="btn btn-success w-25">Submit <i class="bi bi-send"></i></button>
-            <a href="" class="btn w-25 bg-dark text-white text-decoration-none">Back<i class=" bi bi-arrow-return-left"></i></a>
+            <a href="{{ route('backend.listUser') }}" class="btn w-25 bg-dark text-white text-decoration-none">Back<i class=" bi bi-arrow-return-left"></i></a>
             </button>
             @csrf
         </form>
