@@ -56,7 +56,7 @@ class UserController extends Controller
     {
         try {
             if ($request->method() == 'GET') {
-                $comments = Comment::with('user')->where('post_id', $id)->get();
+                $comments = Comment::with('user')->where('post_id', $id)->where('status', 1)->get();
                 $postDetail = Post::with('user')->where('id', $id)->get();
                 foreach ($postDetail as $idCat) {
                     $idCatRelated = $idCat->category_id;
