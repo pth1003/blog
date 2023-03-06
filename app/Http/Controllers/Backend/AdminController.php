@@ -115,11 +115,12 @@ class AdminController extends BaseController
 
     public function createUser(Request $request)
     {
-        if($request->method() == 'GET'){
+        if ($request->method() == 'GET') {
             return view('backend.users.create');
         } else {
             return 123;
         }
+    }
 
     /**
      * checkUser: check user exits
