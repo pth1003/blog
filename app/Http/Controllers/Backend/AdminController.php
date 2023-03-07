@@ -12,6 +12,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Hash;
 use Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AdminController extends BaseController
 {
@@ -209,5 +211,20 @@ class AdminController extends BaseController
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('frontend.index');
+    }
+
+    public function createRolePermission()
+    {
+//        $roleWrite = Role::create(['name' => 'writer']);
+//        $roleAdmin = Role::create(['name' => 'admin']);
+//          Permission::create(['name' => 'delete post']);
+//          Permission::create(['name' => 'create user']);
+//          Permission::create(['name' => 'edit user']);
+//          Permission::create(['name' => 'delete user']);
+//          Permission::create(['name' => 'create category']);
+//          Permission::create(['name' => 'edit category']);
+//          Permission::create(['name' => 'delete category']);
+            $user = User::find(9);
+            $user->givePermissionTo('create category');
     }
 }

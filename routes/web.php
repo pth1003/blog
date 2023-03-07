@@ -27,17 +27,22 @@ Route::prefix('backend')->group(function () {
 
     Route::post('/login', [AdminController::class, 'handleLogin'])->name('backend.login');
     Route::get('/login', [AdminController::class, 'formLogin'])->name('backend.loginForm');
-    Route::match(['get','post'],'/register', [AdminController::class, 'handleRegister'])->name('backend.register');
+    Route::match(['get', 'post'], '/register', [AdminController::class, 'handleRegister'])->name('backend.register');
     Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
 
-    Route::prefix('post')->group(function() {
+    Route::prefix('post')->group(function () {
         Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list');
     });
 
     Route::prefix('user')->group(function () {
-       Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser');
-       Route::match(['post','get'],'/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser');
-       Route::match(['post','get'],'/create', [AdminController::class, 'createUser'])->name('backend.createUser');
+        Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser');
+        Route::match(['post', 'get'], '/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser');
+        Route::match(['post', 'get'], '/create', [AdminController::class, 'createUser'])->name('backend.createUser');
     });
+
+    Route::get('createPermission', [AdminController::class, 'createRolePermission']);
+
 });
+
+
 
