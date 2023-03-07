@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\UserController;
 use App\Http\Controllers\Backend\AdminController;
 
-//Front-End
+// =====  Front-End  =====
 Route::redirect('/', 'frontend');
 Route::prefix('frontend')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('frontend.index');
@@ -15,10 +15,16 @@ Route::prefix('frontend')->group(function () {
     Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write');
 });
 
-//Back-End
+
+// =====  Back-End  ======
 Route::prefix('backend')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('backend.index');
-    Route::prefix('comment')->group(function () {
+
+    Route::prefix('permission')->middleware('role:admin')->group(function () {
+        Route::match(['get', 'post'],'/edit', [AdminController::class, 'editPermission'])->name('backend.permission.edit');
+    });
+
+    Route::prefix('comment')->middleware('permission:edit comment')->group(function () {
         Route::get('/{status}', [AdminController::class, 'comment'])->name('backend.comment.list');
         Route::get('/handle/{id}/del', [AdminController::class, 'handleComment'])->name('backend.comment.del');
         Route::get('/handle/{id}/update', [AdminController::class, 'handleComment'])->name('backend.comment.update');
@@ -31,17 +37,16 @@ Route::prefix('backend')->group(function () {
     Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
 
     Route::prefix('post')->group(function () {
-        Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list');
+        Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list user']);
     });
 
     Route::prefix('user')->group(function () {
-        Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser');
-        Route::match(['post', 'get'], '/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser');
-        Route::match(['post', 'get'], '/create', [AdminController::class, 'createUser'])->name('backend.createUser');
+        Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser')->middleware(['permission:list user']);
+        Route::match(['post', 'get'], '/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser')->middleware(['permission:edit user']);
+        Route::match(['post', 'get'], '/create', [AdminController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
     });
 
-    Route::get('createPermission', [AdminController::class, 'createRolePermission']);
-
+//    Route::match(['get', 'post'],'/edit', [AdminController::class, 'editPermission']);
 });
 
 

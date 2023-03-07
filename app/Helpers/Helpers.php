@@ -21,3 +21,12 @@ function countUser()
     $countUser = User::all()->count();
     return $countUser;
 }
+
+function role()
+{
+    $checkLogin = Auth::check();
+    if($checkLogin){
+        $role = auth()->user()->getRoleNames()->first();
+        return ucfirst($role);
+    }
+}

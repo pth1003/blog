@@ -10,9 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <title>@yield('status')</title>
@@ -21,6 +27,7 @@
     .w-30 {
         width: 30%;
     }
+
     .w-40 {
         width: 40%;
     }
@@ -71,7 +78,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#grid"/>
                                 </svg>
-                                <i class="bi bi-file-post"></i> Posts
+                                <i class="bi bi-file-post-fill"></i> Posts
                             </a>
                         </li>
                         <li>
@@ -80,6 +87,24 @@
                                     <use xlink:href="#people-circle"/>
                                 </svg>
                                 <i class="bi bi-person"></i> User
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('backend.permission.edit') }}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#people-circle"/>
+                                </svg>
+                                <i class="bi bi-box-seam"></i> Permission
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#people-circle"/>
+                                </svg>
+                                <i class="bi bi-person"></i> Role - {{ role() }}
                             </a>
                         </li>
                     </ul>
@@ -98,6 +123,7 @@
                     @yield('user')
                     @yield('editUser')
                     @yield('createUser')
+                    @yield('permission')
                 </div>
             </div>
             <!-- == End content == -->

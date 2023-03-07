@@ -14,6 +14,7 @@ use Hash;
 use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
 
 class AdminController extends BaseController
 {
@@ -25,6 +26,11 @@ class AdminController extends BaseController
      */
     public function index()
     {
+        $checkLogin = Auth::check();
+        if(!$checkLogin){
+          return redirect()->route('backend.login');
+        }
+//        dd(auth()->user()->getPermissionsViaRoles());
         return view('backend.index');
     }
 
@@ -59,7 +65,6 @@ class AdminController extends BaseController
             return redirect()->route('backend.comment.list', ['status' => 1]);
         }
     }
-
     /**
      * update status all comment
      * @return \Illuminate\Http\RedirectResponse
@@ -186,6 +191,9 @@ class AdminController extends BaseController
         $dataLogin = $request->only('username', 'password');
         $login = Auth::attempt($dataLogin);
         if ($login) {
+            if(auth()->user()->hasRole('admin|writer|editor')){
+                return redirect()->route('backend.index');
+            }
             return redirect()->route('frontend.index');
         }
         return view('frontend.login')->with('msg', 'Username or password is incorrect');
@@ -213,18 +221,13 @@ class AdminController extends BaseController
         return redirect()->route('frontend.index');
     }
 
-    public function createRolePermission()
+    public function editPermission(Request $request)
     {
-//        $roleWrite = Role::create(['name' => 'writer']);
-//        $roleAdmin = Role::create(['name' => 'admin']);
-//          Permission::create(['name' => 'delete post']);
-//          Permission::create(['name' => 'create user']);
-//          Permission::create(['name' => 'edit user']);
-//          Permission::create(['name' => 'delete user']);
-//          Permission::create(['name' => 'create category']);
-//          Permission::create(['name' => 'edit category']);
-//          Permission::create(['name' => 'delete category']);
-            $user = User::find(9);
-            $user->givePermissionTo('create category');
+        if($request->method() == 'GET') {
+            $permissions = Permission::all();
+            return view('backend.permission.permission', compact('permissions'));
+        } else {
+            dd($request->all());
+        }
     }
 }
