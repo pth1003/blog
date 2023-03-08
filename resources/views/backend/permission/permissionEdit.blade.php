@@ -12,21 +12,23 @@
         }
     </style>
     <p>Dashboard / Permission</p>
-    <h3>Permission List</h3>
-    <div class="row">
+       <div class="row">
         <form method="POST">
-            @foreach($permissions as $permission)
+            @foreach($allPermissions as $permission)
                 <div class="d-flex col-lg-2 col-md-3 align-items-center justify-content-between w-10 bg-white m-0 mt-2">
                     <p class="m-0">{{ ucfirst($permission->name) }}</p>
                     <input type="checkbox" value="{{ $permission->id }}" name="permission[]"/>
                 </div>
             @endforeach
-
-            <select class="mt-4" name="role">
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-            </select>
-                <button class="btn btn-success">Submit</button>
+            <div class="d-flex mt-4">
+                <p class="m-0">Role</p>
+                <select class="" name="role">
+                    @foreach($roles as $role)
+                        <option value="{{$role->id}}">{{ $role->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <button class="btn btn-success mt-3">Submit</button>
             @csrf
         </form>
     </div>

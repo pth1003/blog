@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\ModelHasPermissions;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,8 +28,8 @@ class AdminController extends BaseController
     public function index()
     {
         $checkLogin = Auth::check();
-        if(!$checkLogin){
-          return redirect()->route('backend.login');
+        if (!$checkLogin) {
+            return redirect()->route('backend.login');
         }
 //        dd(auth()->user()->getPermissionsViaRoles());
         return view('backend.index');
@@ -41,12 +42,14 @@ class AdminController extends BaseController
      */
     public function comment($status)
     {
+        $countCmtPending = Comment::where('status', 0)->count();
+        $countCmtSolved = Comment::where('status', 1)->count();
         $comments = Comment::with('user')->where('status', $status)->simplePaginate(10);
         $idStatus = 0;
         foreach ($comments as $status) {
             $idStatus = $status->status;
         }
-        return view('backend.comment', compact('comments', 'idStatus'));
+        return view('backend.comment', compact('comments', 'idStatus', 'countCmtPending', 'countCmtSolved'));
     }
 
     /**
@@ -65,6 +68,7 @@ class AdminController extends BaseController
             return redirect()->route('backend.comment.list', ['status' => 1]);
         }
     }
+
     /**
      * update status all comment
      * @return \Illuminate\Http\RedirectResponse
@@ -76,23 +80,6 @@ class AdminController extends BaseController
             Comment::where('id', $status->id)->update(['status' => 1]);
         }
         return redirect()->route('backend.comment.list', ['status' => 1]);
-    }
-
-    /**
-     * return list post
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function postManagement($id)
-    {
-        $category = Category::all();
-        $nameCategory = 'All';
-        if ($id == 'all') {
-            $posts = Post::with('user', 'category')->get();
-        } else {
-            $nameCategory = Category::find($id)->name;
-            $posts = Post::with('user', 'category')->where('category_id', $id)->get();
-        }
-        return view('backend.posts', compact('posts', 'category', 'nameCategory'));
     }
 
     /**
@@ -127,29 +114,42 @@ class AdminController extends BaseController
     }
 
     /**
-     * Create user
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|int
      */
-    public function createUser(Request $request)
+    public function handleCreateUser(Request $request)
     {
-        if ($request->method() == 'GET') {
-            return view('backend.users.create');
-        } else {
-            $checkUsername = User::where('username', $request->username)->first();
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkUsername != null || $checkEmail != null) {
-                return view('backend.users.create')->with('msg', 'Username or email already exists');
-            }
-            $dataInsert = [
-                'name' => $request->fullName,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-            ];
-            User::create($dataInsert);
-            return redirect()->route('backend.listUserk');
+        $checkUsername = User::where('username', $request->username)->first();
+        $checkEmail = User::where('email', $request->email)->first();
+        if ($checkUsername != null || $checkEmail != null) {
+            return view('backend.users.create')->with('msg', 'Username or email already exists');
         }
+        $dataInsert = [
+            'name' => $request->fullName,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+        ];
+        $user = User::create($dataInsert);
+//        $userId = User::find($user->id);
+//        $nameRole = $request->selectRole;
+//        $userId->assignRole($nameRole);
+
+        $userId = $user->id;
+//        $nameRole = $request->selectRole;
+        $userId->assignRole('writer');
+        return redirect()->route('backend.listUser');
+    }
+
+    /**
+     * return form create user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function createUser()
+    {
+//        $roles = Role::where('name', '!=', 'admin')->get();
+        return view('backend.users.create');
     }
 
     /**
@@ -176,7 +176,9 @@ class AdminController extends BaseController
                 'password' => Hash::make($request->password),
                 'email' => $request->email,
             ];
-            User::create($dataInsert);
+            $user = User::create($dataInsert);
+            $user = User::find($user->id);
+            $user->assignRole('user');
             return redirect()->route('frontend.index');
         }
     }
@@ -191,7 +193,7 @@ class AdminController extends BaseController
         $dataLogin = $request->only('username', 'password');
         $login = Auth::attempt($dataLogin);
         if ($login) {
-            if(auth()->user()->hasRole('admin|writer|editor')){
+            if (auth()->user()->isAdmin == 1) {
                 return redirect()->route('backend.index');
             }
             return redirect()->route('frontend.index');
@@ -216,18 +218,110 @@ class AdminController extends BaseController
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return redirect()->route('frontend.index');
     }
 
-    public function editPermission(Request $request)
+    /**
+     * nameUser: get name user current
+     * allPermissions: get all permissions
+     * permissionsUser: get User have role as: admin, write, editor
+     * roles: get all role except id = 2 (admin)
+     * idRole: get id_role
+     * role: provider and revoke permission
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function editPermission(Request $request, $id)
+    {
+        if ($request->method() == 'GET') {
+            $nameUser = User::find($id)->name;
+            $allPermissions = Permission::all();
+            $permissionsUser = User::with('permissions', 'roles')->where('id', $id)->get();
+            $roles = Role::where('id', '!=', 2)->get();
+            return view('backend.permission.permissionEdit', compact('permissionsUser', 'roles', 'nameUser', 'allPermissions'));
+        } else {
+            $idRole = $request->role;
+            $role = Role::find($idRole);
+            $role->syncPermissions([$request->permission]);
+            return redirect()->route('backend.permission.list');
+        }
+    }
+
+    public function permissionList()
+    {
+        $roleWithPermission = Role::with('users', 'permissions')->get();
+        $userWithRole = User::with('roles')->get();
+//        $userRole = [];
+        return view('backend.permission.permissionList', compact('roleWithPermission', 'userWithRole'));
+    }
+
+
+    public function addRole(Request $request)
     {
         if($request->method() == 'GET') {
-            $permissions = Permission::all();
-            return view('backend.permission.permission', compact('permissions'));
+            return view('backend.permission.addRole');
         } else {
-            dd($request->all());
+            Role::create(['name' => $request->nameRole]);
+            return redirect()->route('backend.permission.list');
         }
+    }
+
+    /**
+     * return list post
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function postManagement($id)
+    {
+        $category = Category::all();
+        $nameCategory = 'All';
+        if ($id == 'all') {
+            $posts = Post::with('user', 'category')->get();
+        } else {
+            $nameCategory = Category::find($id)->name;
+            $posts = Post::with('user', 'category')->where('category_id', $id)->get();
+        }
+        return view('backend.post.posts', compact('posts', 'category', 'nameCategory'));
+    }
+
+
+    public function editPost(Request $request, $id)
+    {
+        if($request->method() == 'GET'){
+            $post = Post::find($id);
+            $idCat = Post::find($id)->category_id;
+            $categoty = Category::all();
+            return view('backend.post.edit', compact('post', 'categoty', 'idCat'));
+        }else {
+
+//           return view('backend.post.edit', compact('post'));
+        }
+    }
+
+    public function addPost(Request $request)
+    {
+        if($request->method() == "GET"){
+            $categoty = Category::all();
+            return view('backend.post.add', compact('categoty'));
+        }else {
+            $file = $request->file('image');
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('image'), $filename);
+            $dataInsert = [
+                'title' => $request->title,
+                'content' => $request->contentt,
+                'image' => $filename,
+                'category_id' => $request->category,
+                'user_id' => auth()->user()->id
+            ];
+            Post::create($dataInsert);
+            return redirect()->route('backend.post.list', ['id'=>'all']);
+        }
+    }
+
+    public function deletePost($id)
+    {
+        Post::where('id', $id)->delete();
+        return redirect()->route('backend.post.list', ['id'=>'all']);
     }
 }

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <title>Dash board</title>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -65,39 +66,63 @@
                                 <i class="bi bi-house"></i> Dashboard
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('backend.comment.list', ['status'=>1]) }}" class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#table"/>
-                                </svg>
-                                <i class="bi bi-chat"></i> Comment
-                            </a>
+                        @can('edit comment')
+                            <li>
+                                <a href="{{ route('backend.comment.list', ['status'=>1]) }}"
+                                   class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16">
+                                        <use xlink:href="#table"/>
+                                    </svg>
+                                    <i class="bi bi-chat"></i> Comment
+                                </a>
+                            </li>
+                        @endcan
+                        <li class="nav-link text-white">
+                            <div class="dropdown">
+                                <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <svg class="bi me-2" width="16" height="16">
+                                        <use xlink:href="#grid"/>
+                                    </svg>
+                                    <i class="bi bi-chat"></i> Comment
+                                </div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div>Resolve</div>
+                                    <div>Pending</div>
+                                </div>
+                            </div>
                         </li>
-                        <li>
-                            <a href="{{ route('backend.post.list', ['id'=>'all']) }}" class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#grid"/>
-                                </svg>
-                                <i class="bi bi-file-post-fill"></i> Posts
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('backend.listUser') }}" class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#people-circle"/>
-                                </svg>
-                                <i class="bi bi-person"></i> User
-                            </a>
-                        </li>
+                        @can(['list post', 'create post', 'delete post'])
+                            <li>
+                                <a href="{{ route('backend.post.list', ['id'=>'all']) }}" class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16">
+                                        <use xlink:href="#grid"/>
+                                    </svg>
+                                    <i class="bi bi-file-post-fill"></i> Posts
+                                </a>
+                            </li>
+                        @endcan
+                        @can('list user')
+                            <li>
+                                <a href="{{ route('backend.listUser') }}" class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16">
+                                        <use xlink:href="#people-circle"/>
+                                    </svg>
+                                    <i class="bi bi-person"></i> User
+                                </a>
+                            </li>
+                        @endcan
 
+                        @role('admin')
                         <li>
-                            <a href="{{ route('backend.permission.edit') }}" class="nav-link text-white">
+                            <a href="{{ route('backend.permission.list') }}" class="nav-link text-white">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#people-circle"/>
                                 </svg>
                                 <i class="bi bi-box-seam"></i> Permission
                             </a>
                         </li>
+                        @endrole
 
                         <li>
                             <a class="nav-link text-white">
@@ -105,6 +130,14 @@
                                     <use xlink:href="#people-circle"/>
                                 </svg>
                                 <i class="bi bi-person"></i> Role - {{ role() }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('backend.logout') }}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#people-circle"/>
+                                </svg>
+                                <i class="bi bi-person"></i> Logout
                             </a>
                         </li>
                     </ul>
@@ -124,6 +157,10 @@
                     @yield('editUser')
                     @yield('createUser')
                     @yield('permission')
+                    @yield('permissionList')
+                    @yield('addRole')
+                    @yield('editPost')
+                    @yield('addPost')
                 </div>
             </div>
             <!-- == End content == -->

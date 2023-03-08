@@ -21,7 +21,12 @@ Route::prefix('backend')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('backend.index');
 
     Route::prefix('permission')->middleware('role:admin')->group(function () {
-        Route::match(['get', 'post'],'/edit', [AdminController::class, 'editPermission'])->name('backend.permission.edit');
+        Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPermission'])->name('backend.permission.edit');
+        Route::get('/list', [AdminController::class, 'permissionList'])->name('backend.permission.list');
+    });
+
+    Route::prefix('role')->middleware('role:admin')->group(function () {
+        Route::match(['get','post'], '/add', [AdminController::class, 'addRole'])->name('backend.role.add');
     });
 
     Route::prefix('comment')->middleware('permission:edit comment')->group(function () {
@@ -38,12 +43,16 @@ Route::prefix('backend')->group(function () {
 
     Route::prefix('post')->group(function () {
         Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list user']);
+        Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPost'])->name('backend.post.edit');
+        Route::match(['get', 'post'], 'add/add/', [AdminController::class, 'addPost'])->name('backend.post.add');
+        Route::match(['get', 'post'], 'del/delete/{id}', [AdminController::class, 'deletePost'])->name('backend.post.delete');
     });
 
     Route::prefix('user')->group(function () {
         Route::get('/', [AdminController::class, 'listUser'])->name('backend.listUser')->middleware(['permission:list user']);
         Route::match(['post', 'get'], '/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser')->middleware(['permission:edit user']);
-        Route::match(['post', 'get'], '/create', [AdminController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
+        Route::get('/create', [AdminController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
+        Route::post('/create', [AdminController::class, 'handleCreateUser'])->middleware(['permission:create user']);
     });
 
 //    Route::match(['get', 'post'],'/edit', [AdminController::class, 'editPermission']);
