@@ -16,12 +16,12 @@
                 @if(isset(Auth::user()->name))
                     <div class="d-flex">
                         <p>Hi: {{ Auth::user()->name }}</p> &nbsp;
-                        <p><a class="text-decoration-none text-warning" href="{{ route('backend.logout') }}">Logout</a>
+                        <p><a class="text-decoration-none text-warning" href="{{ route('frontend.logout') }}">Logout</a>
                             <i class="bi bi-box-arrow-right text-warning"></i></p>
                     </div>
                 @else
                     <button type="button" class="btn  me-2">
-                        <a class="text-decoration-none text-white" href="{{ route('backend.loginForm') }}">
+                        <a class="text-decoration-none text-white" href="{{ route('frontend.loginForm') }}">
                             Login
                         </a>
                     </button>
