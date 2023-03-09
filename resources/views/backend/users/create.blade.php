@@ -31,11 +31,9 @@
             </div>
             <div class="d-flex align-items-center">
                 <p class="fw-bold m-0">Select role for user</p>
-{{--                @foreach($roles as $role)--}}
-{{--                    <input type="radio" name="selectRole" value="{{$role->name}}" @if($role->id == 1) checked @endif><span>{{ ucfirst($role->name) }}</span>--}}
-{{--                @endforeach--}}
-                <input type="radio" name="selectRole" value="write" /><span>write</span>
-                <input type="radio" name="selectRole" value="editor" /><span>editor</span>
+                @foreach($roles as $role)
+                    <input type="radio" name="selectRole" value="{{$role->name}}" @if($role->id == 1) checked @endif><span>{{ ucfirst($role->name) }}</span>
+                @endforeach
             </div>
             <button type="submit" class="btn btn-success w-25 mt-4">Create <i class="bi bi-send"></i></button>
             <a href="{{ route('backend.listUser') }}" class="btn w-25 bg-dark text-white text-decoration-none mt-4">Back <i

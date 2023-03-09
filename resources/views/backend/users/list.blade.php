@@ -27,7 +27,7 @@
                     <td>{{ $user->created_at->toDayDateTimeString() }}</td>
                     <td>
                         <a class="" href="{{ route('backend.editUser', ['id'=>$user->id]) }}"><i class="bi bi-pencil text-success"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a class="" href=""> <i class="bi bi-trash2 text-danger"></i></a>
+                        <a onclick="return confirm('Confirm delete user?')" class="" href="{{ route('backend.deleteUser', ['id'=>$user->id]) }}"> <i class="bi bi-trash2 text-danger"></i></a>
                     </td>
                 </tr>
             @endforeach

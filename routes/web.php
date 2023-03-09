@@ -13,9 +13,7 @@ Route::prefix('frontend')->group(function () {
     Route::get('/page/{id}', [UserController::class, 'pagePost'])->name('frontend.page');
     Route::get('/error', [UserController::class, 'error'])->name('frontend.error');
     Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write');
-    Route::post('/login', [UserController::class, 'userLogin']);
-    Route::get('/login', [UserController::class, 'formLogin'])->name('frontend.loginForm');
-    Route::get('/logout', [UserController::class, 'logout'])->name('frontend.logout');
+//    Route::match(['get', 'post'], '/login', [UserController::class, 'loginUser'])->name('frontend.login');
 });
 
 
@@ -37,6 +35,7 @@ Route::prefix('backend')->group(function () {
         Route::get('/handle/{id}/del', [AdminController::class, 'handleComment'])->name('backend.comment.del');
         Route::get('/handle/{id}/update', [AdminController::class, 'handleComment'])->name('backend.comment.update');
         Route::get('/handle/confirm', [AdminController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
+        Route::get('/detailComment/{id}', [AdminController::class, 'detailComment'])->name('backend.comment.detailComment');
     });
 
     Route::post('/login', [AdminController::class, 'handleLogin'])->name('backend.login');
@@ -45,10 +44,10 @@ Route::prefix('backend')->group(function () {
     Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
 
     Route::prefix('post')->group(function () {
-        Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list user']);
-        Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPost'])->name('backend.post.edit');
-        Route::match(['get', 'post'], 'add/add/', [AdminController::class, 'addPost'])->name('backend.post.add');
-        Route::match(['get', 'post'], 'del/delete/{id}', [AdminController::class, 'deletePost'])->name('backend.post.delete');
+        Route::get('/{id}', [AdminController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list post']);
+        Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPost'])->name('backend.post.edit')->middleware(['permission:edit post']);
+        Route::match(['get', 'post'], 'add/add/', [AdminController::class, 'addPost'])->name('backend.post.add')->middleware(['permission:create post']);
+        Route::match(['get', 'post'], 'del/delete/{id}', [AdminController::class, 'deletePost'])->name('backend.post.delete')->middleware(['permission:delete post']);
     });
 
     Route::prefix('user')->group(function () {
@@ -56,9 +55,9 @@ Route::prefix('backend')->group(function () {
         Route::match(['post', 'get'], '/edit/{id}', [AdminController::class, 'editUser'])->name('backend.editUser')->middleware(['permission:edit user']);
         Route::get('/create', [AdminController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
         Route::post('/create', [AdminController::class, 'handleCreateUser'])->middleware(['permission:create user']);
+        Route::get('/delete/{id}', [AdminController::class, 'deleteUser'])->name('backend.deleteUser')->middleware(['permission:delete user']);
     });
 
-//    Route::match(['get', 'post'],'/edit', [AdminController::class, 'editPermission']);
 });
 
 
