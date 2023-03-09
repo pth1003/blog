@@ -18,7 +18,9 @@
                 </div>
             </div>
         </div>
-        <a class="btn btn-success" href="{{route('backend.post.add')}}">Add Post</a>
+        @can('create post')
+            <a class="btn btn-success" href="{{route('backend.post.add')}}">Add Post</a>
+        @endcan
     </div>
     <div class="posts container-fluid bg-white mt-1">
         <table class="table fs-13px">
@@ -44,7 +46,8 @@
                         <a href="{{route('backend.post.edit', ['id'=>$post->id])}}">
                             <i class="bi bi-pencil text-success"></i>
                         </a>&nbsp;&nbsp;&nbsp;
-                        <a onclick="return confirm('Confirm delete post?')" href="{{ route('backend.post.delete', ['id'=>$post->id]) }}">
+                        <a onclick="return confirm('Confirm delete post?')"
+                           href="{{ route('backend.post.delete', ['id'=>$post->id]) }}">
                             <i class="bi bi-trash2 text-danger"></i>
                         </a>
                     </td>

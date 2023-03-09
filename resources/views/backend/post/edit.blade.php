@@ -24,7 +24,7 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-success w-100 mt-4">Post</button>
+                <button type="submit" class="btn btn-success w-100 mt-4">Edit</button>
             </fieldset>
             @csrf
         </form>

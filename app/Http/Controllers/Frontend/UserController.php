@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -126,32 +127,18 @@ class UserController extends Controller
     }
 
 
-    public  function formLogin()
-    {
-        return view('frontend.login');
-    }
-
-    public function userLogin(Request $request)
-    {
-        $dt = Carbon::now('Asia/Ho_Chi_Minh');
-        $newPosts = Post::with('user')->orderByDesc('id')->first();
-        $posts = Post::with('user')->take(5)->orderByDesc('id')->get();
-        $postRandom = Post::inRandomOrder()->first();
-        $idCatRandom = Category::inRandomOrder()->first()->id;
-        $catRandom = Post::with('user')->where('category_id', $idCatRandom)->get();
-        $catNameRandom = Category::find($idCatRandom)->name;
-        $dataLogin = $request->only('username', 'password');
-        $login = Auth::attempt($dataLogin);
-        if ($login) {
-            return view('frontend.index', compact('posts', 'newPosts', 'postRandom', 'dt', 'catRandom', 'catNameRandom'));
-        }
-        return view('frontend.login')->with('msg', 'Username or password is incorrect');
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        return redirect()->route('frontend.loginForm');
-    }
-
+//    public function loginUser(Request $request)
+//    {
+//        if($request->method() == 'GET')
+//        {
+//            return view('frontend.login');
+//        } else {
+//            $dataLogin = $request->only('username', 'password');
+//            $login = Auth::attempt($dataLogin);
+//            if ($login) {
+//                return redirect()->route('frontend.index');
+//            }
+//            return view('frontend.login')->with('msg', 'Username or password is incorrect');
+//        }
+//    }
 }

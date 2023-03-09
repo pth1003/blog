@@ -41,6 +41,10 @@
     .name-blog {
         font-family: 'Climate Crisis', cursive;
     }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
 </style>
 <body style="font-family: Montserrat">
 <div class="container-fluid p-0 d-flex min-vh-100 w-100">
@@ -66,40 +70,34 @@
                                 <i class="bi bi-house"></i> Dashboard
                             </a>
                         </li>
-                        @can('edit comment')
-                            <li>
-                                <a href="{{ route('backend.comment.list', ['status'=>1]) }}"
-                                   class="nav-link text-white">
-                                    <svg class="bi me-2" width="16" height="16">
-                                        <use xlink:href="#table"/>
-                                    </svg>
-                                    <i class="bi bi-chat"></i> Comment
-                                </a>
-                            </li>
-                        @endcan
-                        <li class="nav-link text-white">
-                            <div class="dropdown">
-                                <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
-                                    <svg class="bi me-2" width="16" height="16">
-                                        <use xlink:href="#grid"/>
-                                    </svg>
-                                    <i class="bi bi-chat"></i> Comment
+                        @can('list post')
+                            <li style="margin-left: 44px">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-file-post-fill"></i>
+                                    <button
+                                        class="dropdown-toggle text-decoration-none text-white bg-transparent border-0"
+                                        type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                                        Article <i class="bi bi-chevron-double-down"></i>
+                                    </button>
+                                    <div class="dropdown-menu p-2">
+                                        @can('edit post')
+                                            <div>
+                                                <a class="text-decoration-none text-dark"
+                                                   href="{{ route('backend.post.list', ['id'=>'all']) }}">
+                                                    Article management
+                                                </a>
+                                            </div>
+                                        @endcan
+                                        <div>
+                                            @can('edit comment')
+                                                <a class="text-decoration-none text-dark"
+                                                   href="{{ route('backend.comment.list', ['status'=>1]) }}">
+                                                    Comment management
+                                                </a>
+                                            @endcan
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div>Resolve</div>
-                                    <div>Pending</div>
-                                </div>
-                            </div>
-                        </li>
-                        @can(['list post', 'create post', 'delete post'])
-                            <li>
-                                <a href="{{ route('backend.post.list', ['id'=>'all']) }}" class="nav-link text-white">
-                                    <svg class="bi me-2" width="16" height="16">
-                                        <use xlink:href="#grid"/>
-                                    </svg>
-                                    <i class="bi bi-file-post-fill"></i> Posts
-                                </a>
                             </li>
                         @endcan
                         @can('list user')
@@ -123,31 +121,20 @@
                             </a>
                         </li>
                         @endrole
-
-                        <li>
-                            <a class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#people-circle"/>
-                                </svg>
-                                <i class="bi bi-person"></i> Role - {{ role() }}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('backend.logout') }}" class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#people-circle"/>
-                                </svg>
-                                <i class="bi bi-person"></i> Logout
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
             <!-- == End Sidebar == -->
 
             <!-- == Start content == -->
-            <div class="content col-md-9 col-lg-10 m-0 p-3" style="background-color: #f2f2f2">
-                <div class="main-content p-2">
+
+            <div class="content col-md-9 col-lg-10 m-0 p-0" style="background-color: #f2f2f2">
+                <header class="w-100 bg-dark text-white d-flex justify-content-end p-2 align-items-center">
+                    <span>{{ auth()->user()->name }} - {{ role() }}</span>
+                    <a href="{{ route('backend.logout') }}" class="nav-link text-warning">&nbsp;<i
+                            class="bi bi-box-arrow-in-right text-warning"></i> &nbsp;Logout</a>
+                </header>
+                <div class="main-content p-3">
                     <div class="container-box d-flex justify-content-around">
                         @yield('statistical')
                     </div>
@@ -161,6 +148,7 @@
                     @yield('addRole')
                     @yield('editPost')
                     @yield('addPost')
+                    @yield('detailComment')
                 </div>
             </div>
             <!-- == End content == -->
