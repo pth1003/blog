@@ -13,6 +13,9 @@ Route::prefix('frontend')->group(function () {
     Route::get('/page/{id}', [UserController::class, 'pagePost'])->name('frontend.page');
     Route::get('/error', [UserController::class, 'error'])->name('frontend.error');
     Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write');
+    Route::post('/login', [UserController::class, 'userLogin']);
+    Route::get('/login', [UserController::class, 'formLogin'])->name('frontend.loginForm');
+    Route::get('/logout', [UserController::class, 'logout'])->name('frontend.logout');
 });
 
 

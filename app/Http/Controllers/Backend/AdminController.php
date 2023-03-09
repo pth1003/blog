@@ -194,11 +194,11 @@ class AdminController extends BaseController
         $login = Auth::attempt($dataLogin);
         if ($login) {
             if (auth()->user()->isAdmin == 1) {
-                return redirect()->route('backend.index');
+                return view('backend.index');
             }
-            return redirect()->route('frontend.index');
+            return view('backend.login')->with('msg', 'No admin');
         }
-        return view('frontend.login')->with('msg', 'Username or password is incorrect');
+        return view('backend.login')->with('msg', 'Username or password is incorrect');
     }
 
     /**
@@ -207,7 +207,7 @@ class AdminController extends BaseController
      */
     public function formLogin()
     {
-        return view('frontend.login');
+        return view('backend.login');
     }
 
     /**
@@ -218,7 +218,7 @@ class AdminController extends BaseController
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('frontend.index');
+        return redirect()->route('backend.login');
     }
 
     /**
