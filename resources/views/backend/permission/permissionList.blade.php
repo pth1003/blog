@@ -24,7 +24,7 @@
                 </td>
                 <td>
                     @if($role->name != 'admin')
-                        <a class="" href="{{ route('backend.permission.edit', ['id'=>1]) }}"><i
+                        <a class="" href="{{ route('backend.permission.edit', ['id'=>$role->id]) }}"><i
                                 class="bi bi-pencil text-success"></i></a>&nbsp;&nbsp;&nbsp;
                     @endif
                 </td>

@@ -50,7 +50,7 @@
             <input class="mt-4 fw-bold" type="text" name="username" placeholder="Username"/>
         </div>
         <div class="login">
-            <input class="fw-bold" type="text" name="password" placeholder="Password">
+            <input class="fw-bold" type="password" name="password" placeholder="Password">
         </div>
         <button class="btn-success w-100 border-0 mt-5 p-1 radius-bor-3">Login</button>
         <p class="mt-4 text-center">Do not have an account? <span><a href="#">Sign in</a></span></p>
