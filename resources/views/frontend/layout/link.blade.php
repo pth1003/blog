@@ -7,9 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('asset/css/app.css')}}"/>
-<link rel="stylesheet" href="{{asset('asset/css/responsive.css')}}"/>
-<link rel="stylesheet" href="{{asset('asset/icon/fontawesome-free-6.3.0-web/css/all.css')}}"/>
+<link rel="stylesheet" href="{{asset('assets/css/app.css')}}"/>
+<link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}"/>
 <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>

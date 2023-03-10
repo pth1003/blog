@@ -19,17 +19,21 @@
             display: none !important;
         }
 
-        span svg{
+        span svg {
             display: block !important;
             height: 40px !important;
             width: 40px !important;
         }
 
+        .breadcrumb-item a {
+            text-decoration: none !important;
+            color: #000000;
+        }
     }
 </style>
 @section('content')
     <div class="content-page container">
-        <p>Home / <span class="fw-bold">{{ $nameCat }}</span></p>
+        {{ Breadcrumbs::render('cat', $category) }}
         <div class="row">
             <div class="col-md-12">
                 @foreach($listPage as $page)

@@ -58,7 +58,7 @@
                 contentt: "required",
                 image: {
                     required: true,
-                    extension: "jpg, jpeg, png"
+                    extension: "jpg, jpeg"
                 },
             },
 
@@ -67,7 +67,7 @@
                 contentt: "Please enter content",
                 image: {
                     required: "Please select image",
-                    extension: "Please select image have type JPG, JPEG, PNG",
+                    extension: "Please select image have type JPG, JPEG",
                 }
             }
         }) ;

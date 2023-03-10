@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Frontend;
-
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
@@ -15,7 +14,6 @@ use Hash;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-
 
 class UserController extends Controller
 {
@@ -33,14 +31,21 @@ class UserController extends Controller
      */
     public function index()
     {
-        $dt = Carbon::now('Asia/Ho_Chi_Minh');
-        $newPosts = Post::with('user')->orderByDesc('id')->first();
-        $posts = Post::with('user')->take(5)->orderByDesc('id')->get();
-        $postRandom = Post::inRandomOrder()->first();
-        $idCatRandom = Category::inRandomOrder()->first()->id;
-        $catRandom = Post::with('user')->where('category_id', $idCatRandom)->get();
-        $catNameRandom = Category::find($idCatRandom)->name;
-        return view('frontend.index', compact('posts', 'newPosts', 'postRandom', 'dt', 'catRandom', 'catNameRandom'));
+        try {
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $newPosts = Post::with('user')->orderByDesc('id')->first();
+            $posts = Post::with('user')->orderByDesc('id')->simplePaginate(5);
+            $postRandom = Post::inRandomOrder()->first();
+            $postRandom1 = Post::inRandomOrder()->first();
+            $postRandom2 = Post::inRandomOrder()->first();
+            $idCatRandom = Category::inRandomOrder()->first()->id;
+            $catRandom = Post::with('user')->where('category_id', $idCatRandom)->get();
+            $catNameRandom = Category::find($idCatRandom)->name;
+            return view('frontend.index', compact('posts', 'newPosts', 'postRandom', 'dt', 'catRandom', 'catNameRandom', 'postRandom1', 'postRandom2'));
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -58,11 +63,17 @@ class UserController extends Controller
             if ($request->method() == 'GET') {
                 $comments = Comment::with('user')->where('post_id', $id)->where('status', 1)->get();
                 $postDetail = Post::with('user')->where('id', $id)->get();
+                $postRandom = Post::with('user')->inRandomOrder()->first();
+                $idUser = '';
+                if (Auth::check()) {
+                    $idUser = auth()->user()->id;
+                }
+                $checkUserDeleteUpdate = Post::where('user_id', $idUser)->where('id', $id)->count();
                 foreach ($postDetail as $idCat) {
                     $idCatRelated = $idCat->category_id;
                 }
                 $relatedPost = Post::with('user')->where('category_id', $idCatRelated)->where('id', '!=', $id)->get();
-                return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost'));
+                return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost', 'checkUserDeleteUpdate', 'postRandom'));
             } else {
                 $dataInsert = [
                     'content' => $request->contentt,
@@ -73,7 +84,8 @@ class UserController extends Controller
                 return redirect()->back();
             }
         } catch (\Exception $e) {
-            redirect()->route('frontend.error');
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 
@@ -85,16 +97,22 @@ class UserController extends Controller
     public function pagePost($id)
     {
         try {
-//            throw new \Exception('Errorrrr');
-            $listPage = Post::where('category_id', $id)->cursorPaginate(1);
+            $listPage = Post::where('category_id', $id)->cursorPaginate(5);
             $nameCat = Category::find($id)->name;
-            return view('frontend.listpage', compact('listPage', 'nameCat'));
+            $category = Category::find($id);
+            return view('frontend.listpage', compact('listPage', 'nameCat', 'category'));
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
             return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 
+    /**
+     * get: show form write blog
+     * post: insert post
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|void
+     */
     public function writeBlog(Request $request)
     {
         try {
@@ -110,14 +128,61 @@ class UserController extends Controller
                     'content' => $request->contentt,
                     'image' => $filename,
                     'category_id' => $request->category,
-                    'user_id' => 1
+                    'user_id' => auth()->user()->id
                 ];
                 Post::create($dataInsert);
                 return redirect()->route('frontend.index');
             }
         } catch (\Exception $e) {
-            redirect()->route('frontend.error');
+            Log::error($e->getTraceAsString());
+            redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * get: show form edit
+     * post: edit post
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function editBlog(Request $request, $id)
+    {
+        if ($request->method() == 'GET') {
+            $category = Category::all();
+            $post = Post::find($id);
+            return view('frontend.editBlog', compact('category', 'post'));
+        } else {
+            $file = $request->file('image');
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('image'), $filename);
+            $dataInsert = [
+                'title' => $request->title,
+                'content' => $request->contentt,
+                'image' => $filename,
+                'category_id' => $request->category,
+                'user_id' => auth()->user()->id
+            ];
+            Post::where('id', $id)->update($dataInsert);
+            return redirect()->route('frontend.index');
+        }
+    }
+
+    /**
+     * delete blog
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteBlog($id)
+    {
+        try {
+            Post::where('id', $id)->delete();
+            return redirect()->route('frontend.index');
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
+
     }
 
     public function error(Request $request)
@@ -125,20 +190,5 @@ class UserController extends Controller
         $err = $request->get('msg', 'ERROR');
         return view('frontend.error', compact('err'));
     }
-
-
-//    public function loginUser(Request $request)
-//    {
-//        if($request->method() == 'GET')
-//        {
-//            return view('frontend.login');
-//        } else {
-//            $dataLogin = $request->only('username', 'password');
-//            $login = Auth::attempt($dataLogin);
-//            if ($login) {
-//                return redirect()->route('frontend.index');
-//            }
-//            return view('frontend.login')->with('msg', 'Username or password is incorrect');
-//        }
-//    }
 }
+

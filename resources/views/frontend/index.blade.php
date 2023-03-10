@@ -13,12 +13,16 @@
                 </div>
                 <div class="col-lg-4 p-0">
                     <div class="text-light position-relative">
-                        <img class="my-img1 mb" src="{{URL::asset('/image/img.jpg')}}" alt="lỗi"/>
-                        <h5 class="position-absolute bottom-0 title-category fw-bold">Tiêu đề của bài viết</h5>
+                        <a class="text-white" href="{{route('frontend.detail', ['id'=>$postRandom1->id])}}">
+                            <img class="my-img1 mb" src="{{asset('/image/'.$postRandom1['image'])}}" alt="lỗi"/>
+                            <h5 class="position-absolute bottom-0 title-category fw-bold">{{$postRandom1['title']}}</h5>
+                        </a>
                     </div>
                     <div class="text-light position-relative">
-                        <img class="my-img1 mt" src="{{URL::asset('/image/img.jpg')}}" alt="lỗi"/>
-                        <h5 class="position-absolute bottom-0 title-category fw-bold">Tiêu đề của bài viết</h5>
+                        <a class="text-white" href="{{route('frontend.detail', ['id'=>$postRandom2->id])}}">
+                            <img class="my-img1 mt" src="{{asset('/image/'.$postRandom2['image'])}}" alt="lỗi"/>
+                            <h5 class="position-absolute bottom-0 title-category fw-bold">{{$postRandom2['title']}}</h5>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -77,8 +81,6 @@
                                 <p class="text-black">
                                     <small>
                                         <span>Mr.Hau</span>
-                                        <span>03, Aprile, 2023</span>
-                                        <span>6 Comment</span>
                                     </small>
                                 </p>
                                 <p class="card-text fs-6 text-black text-justify">
@@ -110,6 +112,14 @@
                             </div>
                     </div>
                     @endforeach
+                </div>
+                <style>
+                    .pagination svg {
+                        width: 20px;
+                    }
+                </style>
+                <div class="pagination">
+                    {!! $posts->links() !!}
                 </div>
             </div>
         </div>
