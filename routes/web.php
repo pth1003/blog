@@ -20,7 +20,7 @@ Route::prefix('frontend')->group(function () {
 
 // =====  Back-End  ======
 Route::prefix('backend')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('backend.index')->middleware('role:admin|writer');
+    Route::get('/', [AdminController::class, 'index'])->name('backend.index');
 
     Route::prefix('permission')->middleware('role:admin')->group(function () {
         Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPermission'])->name('backend.permission.edit');
