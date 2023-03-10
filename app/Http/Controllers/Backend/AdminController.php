@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\ModelHasPermissions;
@@ -126,7 +125,10 @@ class AdminController extends BaseController
     }
 
     /**
-     *
+     * checkUsername: check user exits
+     * checkEmail: check email exits
+     * userId: get user with id
+     * nameRole: get role of user
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|int
      */
@@ -162,6 +164,11 @@ class AdminController extends BaseController
         return view('backend.users.create', compact('roles'));
     }
 
+    /**
+     * get id delete user
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser($id)
     {
         User::where('id', $id)->delete();
@@ -170,6 +177,7 @@ class AdminController extends BaseController
 
     /**
      * checkUser: check user exits
+     * checkEmail: check email exits
      * dataInsert: insert user into database
      * method GET: return view Form Register
      * method POST: return handle Register
@@ -239,7 +247,7 @@ class AdminController extends BaseController
             Auth::logout();
             return redirect()->route('backend.login');
         } else {
-            Auth::guard('customer')->logout();
+            Auth::logout();
             return redirect()->route('frontend.index');
         }
     }
@@ -258,11 +266,11 @@ class AdminController extends BaseController
     public function editPermission(Request $request, $id)
     {
         if ($request->method() == 'GET') {
-            $nameUser = User::find($id)->name;
             $allPermissions = Permission::all();
-            $permissionsUser = User::with('permissions', 'roles')->where('id', $id)->get();
             $roles = Role::where('id', '!=', 2)->get();
-            return view('backend.permission.permissionEdit', compact('permissionsUser', 'roles', 'nameUser', 'allPermissions'));
+            $idRole = $id;
+            $permissionOfRole = Role::with('permissions')->where('id', $id)->get();
+            return view('backend.permission.permissionEdit', compact('roles', 'allPermissions', 'permissionOfRole', 'idRole'));
         } else {
             $idRole = $request->role;
             $role = Role::find($idRole);
@@ -271,6 +279,11 @@ class AdminController extends BaseController
         }
     }
 
+    /**
+     * roleWithPermission: get permission of role
+     * userWithRole: get role of user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function permissionList()
     {
         $roleWithPermission = Role::with('users', 'permissions')->get();
@@ -278,7 +291,10 @@ class AdminController extends BaseController
         return view('backend.permission.permissionList', compact('roleWithPermission', 'userWithRole'));
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function addRole(Request $request)
     {
         if ($request->method() == 'GET') {
@@ -323,7 +339,14 @@ class AdminController extends BaseController
             $categoty = Category::all();
             return view('backend.post.edit', compact('post', 'categoty', 'idCat'));
         } else {
-            dd($request->all());
+            $dataEdit = [
+                'title' => $request->title,
+                'content' => $request->contentt,
+                'category_id' => $request->category
+            ];
+
+            Post::where('id', $id)->update($dataEdit);
+            return redirect()->route('backend.post.list', ['id' => 'all']);
         }
     }
 
