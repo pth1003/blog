@@ -12,14 +12,15 @@ Route::prefix('frontend')->group(function () {
     Route::post('/detail/{id}', [UserController::class, 'detailPost'])->name('frontend.detail');
     Route::get('/page/{id}', [UserController::class, 'pagePost'])->name('frontend.page');
     Route::get('/error', [UserController::class, 'error'])->name('frontend.error');
-    Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write');
-//    Route::match(['get', 'post'], '/login', [UserController::class, 'loginUser'])->name('frontend.login');
+    Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write')->middleware('permission:create post');
+    Route::match(['post', 'get'], '/edit/{id}', [UserController::class, 'editBlog'])->name('frontend.edit')->middleware('permission:edit post');
+    Route::get ('/delete/{id}', [UserController::class, 'deleteBlog'])->name('frontend.delete')->middleware('permission:delete post');
 });
 
 
 // =====  Back-End  ======
 Route::prefix('backend')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('backend.index');
+    Route::get('/', [AdminController::class, 'index'])->name('backend.index')->middleware('role:admin|writer');
 
     Route::prefix('permission')->middleware('role:admin')->group(function () {
         Route::match(['get', 'post'], '/edit/{id}', [AdminController::class, 'editPermission'])->name('backend.permission.edit');

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
+
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\ModelHasPermissions;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Hash;
 use Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
@@ -40,15 +42,20 @@ class AdminController extends BaseController
      */
     public function comment($status)
     {
-        $countCmtPending = Comment::where('status', 0)->count();
-        $countCmtSolved = Comment::where('status', 1)->count();
-        $countCommentOfPost = Comment::with('post')->where('status', 1)->groupBy('post_id')->select('post_id', DB::raw('count(*) as totalCmt'))->simplePaginate(5);
-        $comments = Comment::with('user', 'post')->where('status', $status)->simplePaginate(7);
-        $idStatus = 0;
-        foreach ($comments as $status) {
-            $idStatus = $status->status;
+        try {
+            $countCmtPending = Comment::where('status', 0)->count();
+            $countCmtSolved = Comment::where('status', 1)->count();
+            $countCommentOfPost = Comment::with('post')->where('status', 1)->groupBy('post_id')->select('post_id', DB::raw('count(*) as totalCmt'))->simplePaginate(5);
+            $comments = Comment::with('user', 'post')->where('status', $status)->simplePaginate(7);
+            $idStatus = 0;
+            foreach ($comments as $status) {
+                $idStatus = $status->status;
+            }
+            return view('backend.comment', compact('comments', 'idStatus', 'countCmtPending', 'countCmtSolved', 'countCommentOfPost'));
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
-        return view('backend.comment', compact('comments', 'idStatus', 'countCmtPending', 'countCmtSolved', 'countCommentOfPost'));
     }
 
     /**
@@ -58,13 +65,18 @@ class AdminController extends BaseController
      */
     public function handleComment($id)
     {
-        $url = substr(url()->current(), -3);
-        if ($url == 'del') {
-            Comment::find($id)->delete();
-            return redirect()->route('backend.comment.list', ['status' => 0]);
-        } else {
-            Comment::where('id', $id)->update(['status' => 1]);
-            return redirect()->route('backend.comment.list', ['status' => 1]);
+        try {
+            $url = substr(url()->current(), -3);
+            if ($url == 'del') {
+                Comment::find($id)->delete();
+                return redirect()->route('backend.comment.list', ['status' => 0]);
+            } else {
+                Comment::where('id', $id)->update(['status' => 1]);
+                return redirect()->route('backend.comment.list', ['status' => 1]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 
@@ -74,11 +86,16 @@ class AdminController extends BaseController
      */
     public function confirmAllComment()
     {
-        $comment = Comment::all();
-        foreach ($comment as $status) {
-            Comment::where('id', $status->id)->update(['status' => 1]);
+        try {
+            $comment = Comment::all();
+            foreach ($comment as $status) {
+                Comment::where('id', $status->id)->update(['status' => 1]);
+            }
+            return redirect()->route('backend.comment.list', ['status' => 1]);
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
-        return redirect()->route('backend.comment.list', ['status' => 1]);
     }
 
 
@@ -89,8 +106,13 @@ class AdminController extends BaseController
      */
     public function detailComment($id)
     {
-        $comments = Comment::with('post')->where('post_id', $id)->where('status', 1)->simplePaginate(10);
-        return view('backend.post.detailComment', compact('comments'));
+        try {
+            $comments = Comment::with('post')->where('post_id', $id)->where('status', 1)->simplePaginate(10);
+            return view('backend.post.detailComment', compact('comments'));
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -99,8 +121,13 @@ class AdminController extends BaseController
      */
     public function listUser()
     {
-        $listUser = User::all();
-        return view('backend.users.list', compact('listUser'));
+        try {
+            $listUser = User::all();
+            return view('backend.users.list', compact('listUser'));
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -110,17 +137,23 @@ class AdminController extends BaseController
      */
     public function editUser(Request $request, $id)
     {
-        if ($request->method() == 'GET') {
-            $userEdit = User::find($id);
-            return view('backend.users.edit', compact('userEdit'));
-        } else {
-            $dataUpdate = [
-                'name' => $request->fullName,
-                'username' => $request->username,
-                'email' => $request->email
-            ];
-            User::where('id', $id)->update($dataUpdate);
-            return redirect()->route('backend.listUser');
+        try {
+            if ($request->method() == 'GET') {
+                $userEdit = User::find($id);
+                return view('backend.users.edit', compact('userEdit'));
+            } else {
+                $dataUpdate = [
+                    'name' => $request->fullName,
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ];
+                User::where('id', $id)->update($dataUpdate);
+                return redirect()->route('backend.listUser');
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 
@@ -134,24 +167,29 @@ class AdminController extends BaseController
      */
     public function handleCreateUser(Request $request)
     {
-        $checkUsername = User::where('username', $request->username)->first();
-        $checkEmail = User::where('email', $request->email)->first();
-        if ($checkUsername != null || $checkEmail != null) {
-            return view('backend.users.create')->with('msg', 'Username or email already exists');
-        }
-        $dataInsert = [
-            'name' => $request->fullName,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-            'isAd' => $request->selectRole != 'user' ? 1 : 0
-        ];
+        try {
+            $checkUsername = User::where('username', $request->username)->first();
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkUsername != null || $checkEmail != null) {
+                return view('backend.users.create')->with('msg', 'Username or email already exists');
+            }
+            $dataInsert = [
+                'name' => $request->fullName,
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'email' => $request->email,
+                'isAd' => $request->selectRole != 'user' ? 1 : 0
+            ];
 
-        $user = User::create($dataInsert);
-        $userId = User::find($user->id);
-        $nameRole = $request->selectRole;
-        $userId->assignRole($nameRole);
-        return redirect()->route('backend.listUser');
+            $user = User::create($dataInsert);
+            $userId = User::find($user->id);
+            $nameRole = $request->selectRole;
+            $userId->assignRole($nameRole);
+            return redirect()->route('backend.listUser');
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -160,8 +198,13 @@ class AdminController extends BaseController
      */
     public function createUser()
     {
-        $roles = Role::where('name', '!=', 'admin')->get();
-        return view('backend.users.create', compact('roles'));
+        try {
+            $roles = Role::where('name', '!=', 'admin')->get();
+            return view('backend.users.create', compact('roles'));
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -171,8 +214,13 @@ class AdminController extends BaseController
      */
     public function deleteUser($id)
     {
-        User::where('id', $id)->delete();
-        return redirect()->route('backend.listUser');
+        try {
+            User::where('id', $id)->delete();
+            return redirect()->route('backend.listUser');
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -186,25 +234,45 @@ class AdminController extends BaseController
      */
     public function handleRegister(Request $request)
     {
-        if ($request->method() == 'GET') {
-            return view('frontend.register');
-        } else {
-            $checkUsername = User::where('username', $request->username)->first();
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkUsername != null || $checkEmail != null) {
-                return view('frontend.register')->with('msg', 'Username or email already exists');
+        try {
+            if ($request->method() == 'GET') {
+                return view('frontend.register');
+            } else {
+                $request->validate([
+                    'fullname' => 'required',
+                    'username' => 'required',
+                    'password' => 'required|min:6',
+                    'password' => 'required|min:6',
+                    'email' => 'required',
+                ], [
+                        'fullname.required' => 'Vui lòng nhập tên đầy đủ',
+                        'username.required' => 'Vui lòng nhập username',
+                        'password.required' => 'Vui lòng nhập passwork',
+                        'password.min' => 'Passwork phải có ít nhất 6 kí tự',
+                        'email.required' => 'Vui lòng nhập email',
+                    ]
+                );
+
+                $checkUsername = User::where('username', $request->username)->first();
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkUsername != null || $checkEmail != null) {
+                    return view('frontend.register')->with('msg', 'Username or email already exists');
+                }
+                $dataInsert = [
+                    'name' => $request->fullname,
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'email' => $request->email,
+                    'isAd' => 0
+                ];
+                $user = User::create($dataInsert);
+                $user = User::find($user->id);
+                $user->assignRole('user');
+                return redirect()->route('frontend.index');
             }
-            $dataInsert = [
-                'name' => $request->fullname,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-                'isAd' => 0
-            ];
-            $user = User::create($dataInsert);
-            $user = User::find($user->id);
-            $user->assignRole('user');
-            return redirect()->route('frontend.index');
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
 
@@ -215,15 +283,30 @@ class AdminController extends BaseController
      */
     public function handleLogin(Request $request)
     {
-        $dataLogin = $request->only('username', 'password');
-        $login = Auth::attempt($dataLogin);
-        if ($login) {
-            if (auth()->user()->isAd == 1) {
-                return redirect()->route('backend.index');
+        try {
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required|min:6',
+            ], [
+                    'username.required' => 'Vui lòng nhập username',
+                    'password.required' => 'Vui lòng nhập passwork',
+                    'password.min' => 'Passwork phải có ít nhất 6 kí tự',
+                ]
+            );
+            $dataLogin = $request->only('username', 'password');
+            $login = Auth::attempt($dataLogin);
+            if ($login) {
+                if (auth()->user()->isAd == 1) {
+                    return redirect()->route('backend.index');
+                }
+                return redirect()->route('frontend.index');
+            } else {
+                return view('backend.login')->with('msg', 'Username or password is incorrect');
             }
-            return redirect()->route('frontend.index');
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
-        return view('backend.login')->with('msg', 'Username or password is incorrect');
     }
 
     /**

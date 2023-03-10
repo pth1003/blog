@@ -30,3 +30,9 @@ function role()
         return ucfirst($role);
     }
 }
+
+function category()
+{
+    $category = Category::all();
+    return $category;
+}
