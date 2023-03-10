@@ -18,11 +18,6 @@
                             <span><i class="bi bi-alarm text-danger fw-bold"></i> {{ $post->created_at-> toDayDateTimeString() }}</span>
                             @if(Auth::check())
                                 @if($checkUserDeleteUpdate > 0)
-                                    <a onclick="return confirm('Do you want delete your blog ??')"
-                                       class="text-decoration-none text-success fw-bold"
-                                       href="{{ route('frontend.delete', ['id'=>$post->id]) }}">
-                                        <i class="bi bi-trash3"></i> Delete
-                                    </a>
                                     <a class="text-decoration-none text-warning fw-bold"
                                        href="{{ route('frontend.edit', ['id'=>$post->id]) }}">
                                         <i class="bi bi-pencil"></i> Edit
