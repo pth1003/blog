@@ -13,29 +13,26 @@
     </style>
     <p>Dashboard / Permission</p>
     <div class="row">
-        @foreach($permissionOfRole as $perRole)
-            <h4 class="m-0">All permission of role <span class="fw-bold">{{ucfirst($perRole->name)}}</span></h4>
-            @foreach($perRole->permissions as $key=>$namePermision)
-                <div class="d-flex">
-                    {{++$key}}.{{ucfirst($namePermision->name) }}&nbsp;&nbsp;
-                </div>
-            @endforeach
-        @endforeach
-
+        <h4 class="m-0">All permission of role <span class="fw-bold">{{ucfirst($role->name)}}</span></h4>
         <form method="POST">
-            @foreach($allPermissions as $permission)
-                <div class="d-flex col-lg-2 col-md-3 align-items-center justify-content-between w-10 bg-white m-0 mt-2">
-                    <p class="m-0">{{ ucfirst($permission->name) }}</p>
-                    <input type="checkbox" value="{{ $permission->id }}" name="permission[]"/>
-                </div>
-            @endforeach
-            <div class="d-flex mt-4">
-                <p class="m-0">Role</p>
-                <select class="" name="role">
-                    @foreach($roles as $role)
-                        <option value="{{$role->id}}" @if($role->id == $idRole) selected @endif>{{ $role->name }}</option>
-                    @endforeach
-                </select>
+            <div class="d-flex justify-content-around">
+                @foreach($groupPermission as $group)
+                    <div class=" col-lg-2 col-md-3 align-items-center justify-content-between w-10 bg-white m-0 mt-2">
+                        <p class="m-0 p-3 fw-bold">{{ ucfirst($group->name) }}</p>
+                        <div class="">
+                            @foreach($group->permissions as $permision)
+                                <div class="d-flex justify-content-between p-3">
+                                    <p class="m-0">{{ ucfirst($permision->name) }}</p>
+                                    <input type="checkbox"
+                                           value="{{ $permision->id }}"
+                                           name="permission[]"
+                                           @if (isset($permisions[$permision->id])) checked @endif
+                                    />
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
             </div>
             <button class="btn btn-success mt-3">Submit</button>
             @csrf

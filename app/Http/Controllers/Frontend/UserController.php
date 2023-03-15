@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Frontend;
+
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
@@ -68,20 +69,25 @@ class UserController extends Controller
                 if (Auth::check()) {
                     $idUser = auth()->user()->id;
                 }
+
                 $checkUserDeleteUpdate = Post::where('user_id', $idUser)->where('id', $id)->count();
                 foreach ($postDetail as $idCat) {
                     $idCatRelated = $idCat->category_id;
                 }
+
                 $relatedPost = Post::with('user')->where('category_id', $idCatRelated)->where('id', '!=', $id)->get();
                 return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost', 'checkUserDeleteUpdate', 'postRandom'));
             } else {
                 $dataInsert = [
                     'content' => $request->contentt,
                     'post_id' => $id,
-                    'user_id' => 1
+                    'user_id' => auth()->user()->id
                 ];
-                Comment::create($dataInsert);
-                return redirect()->back();
+                $comment = Comment::create($dataInsert);
+                if ($comment) {
+                    echo "<script type='text/javascript'>alert('Comments are pending !!');window.history.back()</script>";
+                }
+
             }
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());

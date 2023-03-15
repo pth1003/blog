@@ -6,19 +6,25 @@
     <form class="w-100" id="form-login" method="POST">
         <fieldset>
             <div class="login">
-                <input class="mt-3 fw-bold" type="text" id="fullname" name="fullname" placeholder="Fullname" value="{{old('fullname')}}"/>
+                <input class="mt-3 fw-bold" type="text" id="fullname" name="fullname" placeholder="Fullname"
+                       value="{{old('fullname')}}"/>
             </div>
             <div class="login">
-                <input class="mt-3 fw-bold" type="text" id="username" name="username" placeholder="Username" value="{{old('username')}}"/>
+                <input class="mt-3 fw-bold" type="text" id="username" name="username" placeholder="Username"
+                       value="{{old('username')}}"/>
             </div>
             <div class="login">
-                <input class="mt-3 fw-bold" type="password" id="password" name="password" placeholder="Password" value="{{old('password')}}"/>
+                <input class="mt-3 fw-bold" type="password" id="password" name="password" placeholder="Password"
+                       value="{{old('password')}}"/>
             </div>
             <div class="login">
-                <input class="mt-3 fw-bold" type="password" id="rePassword" name="rePassword" placeholder="Retype Password" value="{{old('rePassword')}}"/>
+                <input class="mt-3 fw-bold" type="password" id="rePassword" name="rePassword"
+                       placeholder="Retype Password"
+                       value="{{old('rePassword')}}"/>
             </div>
             <div class="login">
-                <input class="mt-3 fw-bold" type="email" id="email" name="email" placeholder="Email" value="{{old('email')}}"/>
+                <input class="mt-3 fw-bold" type="email" id="email" name="email" placeholder="Email"
+                       value="{{old('email')}}"/>
             </div>
             <button type="submit" class="btn-success w-100 border-0 mt-5 p-1 radius-bor-3">Register</button>
         </fieldset>
@@ -46,16 +52,16 @@
             fullname: "required",
             username: "required",
             password: {
-                required:true,
-                minlength:6
+                required: true,
+                minlength: 6
             },
             rePassword: {
-                required:true,
+                required: true,
                 equalTo: "#password"
             },
             email: {
-                required:true,
-                email:true
+                required: true,
+                email: true
             }
         },
         messages: {

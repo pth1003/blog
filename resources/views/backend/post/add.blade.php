@@ -32,7 +32,7 @@
 
     <style>
         .error {
-            color:red;
+            color: red;
         }
     </style>
     <script>
@@ -54,7 +54,7 @@
                     extension: "Please select image have type JPG, JPEG, PNG",
                 }
             }
-        }) ;
+        });
     </script>
 @endsection
 

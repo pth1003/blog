@@ -46,10 +46,12 @@
                         <div class="m-3">
                             <h5 class="card-title fs-4 fw-bold">
                                 <a class="text-decoration-none text-black"
-                                   href="{{ route('frontend.detail', ['id'=>$page->id]) }}">{{ $page->title }}</a>
+                                   href="{{ route('frontend.detail', ['id'=>$page->id]) }}">{{ $page->title }}
+                                </a>
                             </h5>
-                            <div
-                                class="bg-danger text-light d-inline-block position-absolute category">{{ $page->category->name }}</div>
+                            <div class="bg-danger text-light d-inline-block position-absolute category">
+                                {{ $page->category->name }}
+                            </div>
                             <p class="card-text">
                                 <small>
                                     <span>{{ $page->user->name }}</span>
@@ -70,5 +72,4 @@
     <ul class="pagination d-flex justify-content-center">
         {!! $listPage->links() !!}
     </ul>
-
 @endsection

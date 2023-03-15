@@ -22,12 +22,17 @@
                                        href="{{ route('frontend.edit', ['id'=>$post->id]) }}">
                                         <i class="bi bi-pencil"></i> Edit
                                     </a>
+                                    <a onclick="return (confirm('Are you want delete blog ?'))"
+                                       class="text-decoration-none text-danger fw-bold"
+                                       href="{{ route('frontend.delete', ['id'=>$post->id]) }}">
+                                        <i class="bi bi-trash3"></i> Delete
+                                    </a>
                                 @endif
                             @endif
                         </small>
                     </p>
                     <p class="card-text fs-6 text-justify">
-                        {{ $post->content }}
+                        {{  $post->content }}
                     </p>
                 @endforeach
                 <!--=== End Post Detail ===-->
@@ -49,8 +54,9 @@
                         <div class="user-comment mt">
                             <div style="font-size: 12px" class="d-flex fw-bold">
                                 <p class="m-0 fs-13px"><i class="bi bi-person"></i> {{ $comment->user->name }} </p>&nbsp;
-                                <p class="m-0"><i
-                                        class="bi bi-alarm"></i> {{ $comment->created_at->toDayDateTimeString() }} </p>
+                                <p class="m-0"><i class="bi bi-alarm"></i>
+                                    {{ $comment->created_at->toDayDateTimeString() }}
+                                </p>
                             </div>
                             <p class="bg-white p-1" style="font-size: 14px">{{ $comment->content }}</p>
                         </div>
@@ -73,8 +79,8 @@
                         </div>
                         <div class="mt mb">
                             <a class="text-decoration-none"
-                               href="{{ route('frontend.detail', ['id'=>$postRandom->id]) }}"><h5
-                                    class="card-title fw-bold text-black">{{ $postRandom['title'] }}</h5>
+                               href="{{ route('frontend.detail', ['id'=>$postRandom->id]) }}">
+                                <h5 class="card-title fw-bold text-black">{{ $postRandom['title'] }} </h5>
                             </a>
                             <p class="card-text fs-6 text-black text-justify"> {{ substr($postRandom['content'], 0,170) }}
                                 ...
@@ -90,12 +96,14 @@
                     </div>
                     @foreach($relatedPost as $post)
                         <div class="d-flex mb-4 mr-1 ml-4px">
-                            <img class="mr-1" src="{{URL::asset('/image/'.$post->image)}}" alt="Card image cap"
+                            <img class="mr-1" src="{{ asset('/image/'.$post->image) }}" alt="Card image cap"
                                  width="120px"
                                  height="100px">
                             <div>
                                 <p class="card-text text-black fw-bold m-0">
-                                    <a class="text-decoration-none text-black fs-13px" href="">{{ $post->title }}</a>
+                                    <a class="text-decoration-none text-black fs-13px"
+                                       href=" {{route('frontend.detail', ['id'=>$post->id])}} ">{{ $post->title }}
+                                    </a>
                                 </p>
                                 <p class="text-white fs-13px bg-danger d-inline-block p-1-5 m-0">{{ $post->category->name }}</p>
                                 <p class="card-text text-black">

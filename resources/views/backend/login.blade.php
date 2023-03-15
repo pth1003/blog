@@ -52,10 +52,27 @@
         <div class="login">
             <input class="fw-bold" type="password" name="password" placeholder="Password">
         </div>
-        <button class="btn-success w-100 border-0 mt-5 p-1 radius-bor-3">Login</button>
-        <p class="mt-4 text-center">Do not have an account? <span><a href="#">Sign in</a></span></p>
+        <button class="btn-success w-100 border-0 mt-5 p-1 radius-bor-3">
+            Login
+        </button>
+        <p class="mt-4 text-center">Do not have an account?
+            <span>
+                <a href="{{route('backend.register')}}">Sign in</a>
+            </span>
+        </p>
         @csrf
     </form>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if(isset($msg))
         <p class="alert-danger p-2 text-danger w-100 text-center fw-bold">{{ $msg }}</p>
     @endif
@@ -64,12 +81,16 @@
     $('#form-login').validate({
         rules: {
             username: "required",
-            password: "required"
+            password: {
+                required: true,
+                minlength: 6
+            },
         },
 
         messages: {
             username: "Please enter your username",
             password: "Please enter your password",
+            password: "Password has minimum 6 character",
         }
     })
 </script>

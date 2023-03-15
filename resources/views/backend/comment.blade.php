@@ -17,11 +17,13 @@
             </span>
         </h5>
         <a class="btn btn-success btn-sm"
-           href="{{ route('backend.comment.list', ['status'=>0]) }}">Pending {{$countCmtPending}} <i
-                class="bi bi-hourglass-bottom"></i></a>
+           href="{{ route('backend.comment.list', ['status'=>0]) }}">Pending {{$countCmtPending}}
+            <i class="bi bi-hourglass-bottom"></i>
+        </a>
         <a class="btn btn-warning btn-sm text-white"
-           href="{{ route('backend.comment.list', ['status'=>1]) }}">Solved {{$countCmtSolved}} <i
-                class="bi bi-cloud-check-fill"></i></a>
+           href="{{ route('backend.comment.list', ['status'=>1]) }}">Solved {{$countCmtSolved}}
+            <i class="bi bi-cloud-check-fill"></i>
+        </a>
     </div>
     <div class="comment p-3 mt-2 bg-white">
         @if($comments->count() > 0)

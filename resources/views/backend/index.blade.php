@@ -9,7 +9,7 @@
         <i class="bi bi-newspaper fs-1 text-primary"></i>
         <div class="">
             <p class="m-0 p-0 fs-4 fw-bold text-primary">Post</p>
-            <p class="m-0 p-0 fs-5">{{ countPost() }}</p>
+            <p class="m-0 p-0 fs-5">{{ $countPost }}</p>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
         <i class="bi bi-people fs-1 text-danger"></i>
         <div class="">
             <p class="m-0 p-0 fs-4 fw-bold text-primary">User</p>
-            <p class="m-0 p-0 fs-5">{{ countUser() }}</p>
+            <p class="m-0 p-0 fs-5">{{ $countUser }}</p>
         </div>
     </div>
 
@@ -25,7 +25,7 @@
         <i class="bi bi-app fs-1 text-success"></i>
         <div class="">
             <p class="m-0 p-0 fs-4 fw-bold text-primary">Category</p>
-            <p class="m-0 p-0 fs-5">{{ countCategory() }}</p>
+            <p class="m-0 p-0 fs-5">{{ $countCategory }}</p>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         <i class="bi bi-chat-fill text-primary fs-1"></i>
         <div class="">
             <p class="m-0 p-0 fs-4 fw-bold text-primary">Comment</p>
-            <p class="m-0 p-0 fs-5">{{ countCategory() }}</p>
+            <p class="m-0 p-0 fs-5">{{ $countCategory }}</p>
         </div>
     </div>
 @endsection

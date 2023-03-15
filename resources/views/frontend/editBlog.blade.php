@@ -45,7 +45,9 @@
                     <label class="fs-4 fw-bold">Select category</label>
                     <select name="category">
                         @foreach($category as $cat)
-                            <option value="{{ $cat->id }}" @if($cat->id == $post->category->id) selected @endif> {{ $cat->name }}</option>
+                            <option value="{{ $cat->id }}"
+                                    @if($cat->id == $post->category->id) selected @endif> {{ $cat->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

@@ -18,7 +18,7 @@
         }
 
         .error {
-            color:red;
+            color: red;
             font-weight: bold;
         }
     </style>
@@ -70,7 +70,7 @@
                     extension: "Please select image have type JPG, JPEG",
                 }
             }
-        }) ;
+        });
     </script>
 @endsection
 

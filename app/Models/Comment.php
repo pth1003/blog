@@ -14,7 +14,7 @@ class Comment extends Model
     public $table = 'comment';
 
     public $fillable = ['content', 'post_id', 'user_id'];
-    public function post(): BelongsTo
+    public function post():BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
@@ -24,4 +24,8 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeStatus($query, $state = 1)
+    {
+        return $query->where('status', $state);
+    }
 }

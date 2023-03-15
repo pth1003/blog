@@ -2,6 +2,7 @@
 <head>
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('assets/css/app.css')}}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
@@ -112,14 +113,14 @@
                         @endcan
 
                         @role('admin')
-                        <li>
-                            <a href="{{ route('backend.permission.list') }}" class="nav-link text-white">
-                                <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#people-circle"/>
-                                </svg>
-                                <i class="bi bi-box-seam"></i> Permission
-                            </a>
-                        </li>
+                            <li>
+                                <a href="{{ route('backend.permission.list') }}" class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16">
+                                        <use xlink:href="#people-circle"/>
+                                    </svg>
+                                    <i class="bi bi-box-seam"></i> Permission
+                                </a>
+                            </li>
                         @endrole
                     </ul>
                 </div>
