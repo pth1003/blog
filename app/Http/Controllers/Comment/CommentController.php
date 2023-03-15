@@ -25,8 +25,8 @@ class CommentController extends Controller
         try {
             $countCmtPending = Comment::status(0)->count();
             $countCmtSolved = Comment::status(1)->count();
-            $countCommentOfPost = Comment::with('post')->where('status', 1)->groupBy('post_id')->select('post_id', DB::raw('count(*) as totalCmt'))->simplePaginate(5);
-//            $countCommentOfPost = Comment::where('post_id')->groupBy('post_id')->count();
+            $countCommentOfPost = Comment::with('post')->where('status', 1)->groupBy('post_id')
+                                ->select('post_id', DB::raw('count(*) as totalCmt'))->simplePaginate(5);
             $comments = Comment::with('user', 'post')->where('status', $status)->simplePaginate(7);
             $idStatus = 0;
             foreach ($comments as $status) {
@@ -47,19 +47,26 @@ class CommentController extends Controller
     public function handleComment($id)
     {
         try {
-            $url = substr(url()->current(), -3);
-            if ($url == 'del') {
-                Comment::find($id)->delete();
-                return redirect()->route('backend.comment.list', ['status' => 0]);
-            } else {
-                Comment::where('id', $id)->update(['status' => 1]);
-                return redirect()->route('backend.comment.list', ['status' => 1]);
-            }
+            Comment::where('id', $id)->update(['status' => 1]);
+            return redirect()->route('backend.comment.list', ['status' => 1]);
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
             return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
         }
     }
+
+
+    public function deleteComment($id)
+    {
+        try {
+            Comment::find($id)->delete();
+            return redirect()->route('backend.comment.list', ['status' => 1]);
+        } catch (\Exception $e) {
+            Log::error($e->getTraceAsString());
+            return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
+        }
+    }
+
 
     /**
      * update status all comment

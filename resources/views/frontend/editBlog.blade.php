@@ -33,7 +33,7 @@
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Content</label>
-                    <textarea rows="5" class="w-100 text-area-blog" name="contentt" required>
+                    <textarea rows="5" class="w-100 text-area-blog" name="contentt" id="content-ckeditor" required>
                         {{$post['content']}}
                     </textarea>
                 </div>
@@ -76,6 +76,9 @@
                 }
             }
         });
+
+        ClassicEditor
+            .create( document.querySelector( '#content-ckeditor' ) )
     </script>
 @endsection
 

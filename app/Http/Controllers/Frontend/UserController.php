@@ -136,6 +136,7 @@ class UserController extends Controller
                     'category_id' => $request->category,
                     'user_id' => auth()->user()->id
                 ];
+
                 Post::create($dataInsert);
                 return redirect()->route('frontend.index');
             }

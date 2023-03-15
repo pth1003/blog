@@ -44,7 +44,7 @@ Route::prefix('backend')->group(function () {
 
     Route::prefix('comment')->middleware('permission:edit comment')->group(function () {
         Route::get('/{status}', [CommentController::class, 'comment'])->name('backend.comment.list');
-        Route::get('/handle/{id}/del', [CommentController::class, 'handleComment'])->name('backend.comment.del');
+        Route::get('/handle/{id}/del', [CommentController::class, 'deleteComment'])->name('backend.comment.del');
         Route::get('/handle/{id}/update', [CommentController::class, 'handleComment'])->name('backend.comment.update');
         Route::get('/handle/confirm', [CommentController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
         Route::get('/detailComment/{id}', [CommentController::class, 'detailComment'])->name('backend.comment.detailComment');

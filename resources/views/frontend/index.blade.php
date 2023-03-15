@@ -60,7 +60,7 @@
                                     </small>
                                 </p>
                                 <p class="card-text fs-6">
-                                    {{ substr($post->content, 0, 170) }}
+                                    {!! substr($post->content, 0, 170) !!}
                                     <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}">...more</a>
                                 </p>
                             </div>
@@ -76,7 +76,7 @@
                                 <img class="m-1" src="{{asset('/image/'.$postRandom['image'])}}" alt="Card image cap"
                                      width="100%" height="240px">
                             </div>
-                            <div class="mt mb">
+                            <div class="mt mb text-black">
                                 <h5 class="card-title fw-bold text-black">{{ $postRandom['title'] }}</h5>
                                 <p class="text-black">
                                     <small>
@@ -84,7 +84,7 @@
                                     </small>
                                 </p>
                                 <p class="card-text fs-6 text-black text-justify">
-                                    {{ substr($postRandom['content'], 0, 170) }}
+                                    {!! substr($postRandom['content'], 0, 170) !!}
                                 </p>
                             </div>
                         </div>
@@ -110,8 +110,8 @@
                                     </p>
                                 </div>
                             </div>
+                        @endforeach
                     </div>
-                    @endforeach
                 </div>
                 <style>
                     .pagination svg {

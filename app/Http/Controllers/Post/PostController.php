@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:list user|edit user|delete user|create user']);
+        $this->middleware(['permission:list post|edit post|delete post|create post']);
     }
 
     /**

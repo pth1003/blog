@@ -32,7 +32,7 @@
                         </small>
                     </p>
                     <p class="card-text fs-6 text-justify">
-                        {{  $post->content }}
+                        {!! $post->content !!}
                     </p>
                 @endforeach
                 <!--=== End Post Detail ===-->
@@ -82,7 +82,7 @@
                                href="{{ route('frontend.detail', ['id'=>$postRandom->id]) }}">
                                 <h5 class="card-title fw-bold text-black">{{ $postRandom['title'] }} </h5>
                             </a>
-                            <p class="card-text fs-6 text-black text-justify"> {{ substr($postRandom['content'], 0,170) }}
+                            <p class="card-text fs-6 text-justify"> {!! substr($postRandom['content'], 0,170) !!}
                                 ...
                             </p>
                         </div>

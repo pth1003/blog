@@ -32,7 +32,7 @@
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Content</label>
-                    <textarea rows="5" class="w-100 text-area-blog" name="contentt" required>Content</textarea>
+                    <textarea class="w-100 text-area-blog" name="contentt" id="content-ckeditor" required> {{old('contentt')}} </textarea>
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Select image</label>
@@ -71,6 +71,9 @@
                 }
             }
         });
+
+        ClassicEditor
+            .create( document.querySelector( '#content-ckeditor' ) )
     </script>
 @endsection
 

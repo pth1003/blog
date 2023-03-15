@@ -36,6 +36,8 @@ class AdminController extends BaseController
         $checkLogin = Auth::check();
         if (!$checkLogin) {
             return redirect()->route('backend.login');
+        } elseif (auth()->user()->isAd == 0) {
+            return redirect()->route('backend.login');
         } else {
             $countPost = Post::all()->count();
             $countCategory = Category::all()->count();
