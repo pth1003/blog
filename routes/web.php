@@ -31,43 +31,41 @@ Route::prefix('backend')->group(function () {
     Route::post('/register', [LoginController::class, 'handleRegister'])->name('backend.register');
     Route::get('/logout', [LoginController::class, 'logout'])->name('backend.logout');
 
-//    Route::middleware('checkLogin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('backend.index');
+    Route::middleware('checkLogin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('backend.index');
+        Route::prefix('permission')->middleware('role:admin')->group(function () {
+            Route::match(['get', 'post'], '/edit/{id}', [PermissionsController::class, 'editPermission'])->name('backend.permission.edit');
+            Route::get('/list', [PermissionsController::class, 'permissionList'])->name('backend.permission.list');
+        });
 
-    Route::prefix('permission')->middleware('role:admin')->group(function () {
-        Route::match(['get', 'post'], '/edit/{id}', [PermissionsController::class, 'editPermission'])->name('backend.permission.edit');
-        Route::get('/list', [PermissionsController::class, 'permissionList'])->name('backend.permission.list');
+        Route::prefix('role')->middleware('role:admin')->group(function () {
+            Route::match(['get', 'post'], '/add', [PermissionsController::class, 'addRole'])->name('backend.role.add');
+        });
+
+        Route::prefix('comment')->middleware('permission:edit comment')->group(function () {
+            Route::get('/{status}', [CommentController::class, 'comment'])->name('backend.comment.list');
+            Route::get('/handle/{id}/del', [CommentController::class, 'deleteComment'])->name('backend.comment.del');
+            Route::get('/handle/{id}/update', [CommentController::class, 'handleComment'])->name('backend.comment.update');
+            Route::get('/handle/confirm', [CommentController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
+            Route::get('/detailComment/{id}', [CommentController::class, 'detailComment'])->name('backend.comment.detailComment');
+        });
+
+
+        Route::prefix('post')->group(function () {
+            Route::get('/{id}', [PostController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list post']);
+            Route::match(['get', 'post'], '/edit/{id}', [PostController::class, 'editPost'])->name('backend.post.edit')->middleware(['permission:edit post']);
+            Route::match(['get', 'post'], 'add/add/', [PostController::class, 'addPost'])->name('backend.post.add')->middleware(['permission:create post']);
+            Route::match(['get', 'post'], 'del/delete/{id}', [PostController::class, 'deletePost'])->name('backend.post.delete')->middleware(['permission:delete post']);
+        });
+
+        Route::prefix('user')->group(function () {
+            Route::get('/', [UsersController::class, 'listUser'])->name('backend.listUser')->middleware(['permission:list user']);
+            Route::match(['post', 'get'], '/edit/{id}', [UsersController::class, 'editUser'])->name('backend.editUser')->middleware(['permission:edit user']);
+            Route::get('/create', [UsersController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
+            Route::post('/create', [UsersController::class, 'handleCreateUser'])->middleware(['permission:create user']);
+            Route::get('/delete/{id}', [UsersController::class, 'deleteUser'])->name('backend.deleteUser')->middleware(['permission:delete user']);
+        });
     });
-
-    Route::prefix('role')->middleware('role:admin')->group(function () {
-        Route::match(['get', 'post'], '/add', [PermissionsController::class, 'addRole'])->name('backend.role.add');
-    });
-
-    Route::prefix('comment')->middleware('permission:edit comment')->group(function () {
-        Route::get('/{status}', [CommentController::class, 'comment'])->name('backend.comment.list');
-        Route::get('/handle/{id}/del', [CommentController::class, 'deleteComment'])->name('backend.comment.del');
-        Route::get('/handle/{id}/update', [CommentController::class, 'handleComment'])->name('backend.comment.update');
-        Route::get('/handle/confirm', [CommentController::class, 'confirmAllComment'])->name('backend.comment.confirmAll');
-        Route::get('/detailComment/{id}', [CommentController::class, 'detailComment'])->name('backend.comment.detailComment');
-    });
-
-
-    Route::prefix('post')->group(function () {
-        Route::get('/{id}', [PostController::class, 'postManagement'])->name('backend.post.list')->middleware(['permission:list post']);
-        Route::match(['get', 'post'], '/edit/{id}', [PostController::class, 'editPost'])->name('backend.post.edit')->middleware(['permission:edit post']);
-        Route::match(['get', 'post'], 'add/add/', [PostController::class, 'addPost'])->name('backend.post.add')->middleware(['permission:create post']);
-        Route::match(['get', 'post'], 'del/delete/{id}', [PostController::class, 'deletePost'])->name('backend.post.delete')->middleware(['permission:delete post']);
-    });
-
-    Route::prefix('user')->group(function () {
-        Route::get('/', [UsersController::class, 'listUser'])->name('backend.listUser')->middleware(['permission:list user']);
-        Route::match(['post', 'get'], '/edit/{id}', [UsersController::class, 'editUser'])->name('backend.editUser')->middleware(['permission:edit user']);
-        Route::get('/create', [UsersController::class, 'createUser'])->name('backend.createUser')->middleware(['permission:create user']);
-        Route::post('/create', [UsersController::class, 'handleCreateUser'])->middleware(['permission:create user']);
-        Route::get('/delete/{id}', [UsersController::class, 'deleteUser'])->name('backend.deleteUser')->middleware(['permission:delete user']);
-    });
-//    });
-
 });
 
 

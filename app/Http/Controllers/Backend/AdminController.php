@@ -17,23 +17,21 @@ class AdminController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function __construct()
+    {
+        $this->middleware('role:admin|writer');
+    }
+
     /**
      * dashboard
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        $checkLogin = Auth::check();
-        if (!$checkLogin) {
-            return redirect()->route('backend.login');
-        } elseif (auth()->user()->isAd == 0) {
-            return redirect()->route('backend.login');
-        } else {
-            $countPost = Post::all()->count();
-            $countCategory = Category::all()->count();
-            $countComment = Comment::all()->count();
-            $countUser = User::all()->count();
-            return view('backend.index', compact('countUser', 'countPost', 'countComment', 'countCategory'));
-        }
+        $countPost = Post::all()->count();
+        $countCategory = Category::all()->count();
+        $countComment = Comment::all()->count();
+        $countUser = User::all()->count();
+        return view('backend.index', compact('countUser', 'countPost', 'countComment', 'countCategory'));
     }
 }
