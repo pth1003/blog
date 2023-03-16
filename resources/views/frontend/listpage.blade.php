@@ -38,6 +38,9 @@
             <div class="col-md-12">
                 @foreach($listPage as $page)
                     <div class="d-flex position-relative responsive-post">
+                        @section('title')
+                            {{$page->category->name}}
+                        @endsection
                         <div class="img-card">
                             <a href="{{ route('frontend.detail', ['id'=>$page->id]) }}">
                                 <img class="m-1 img-page" src="{{asset('/image/'.$page->image)}}" alt="Card image cap">

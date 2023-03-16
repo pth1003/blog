@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -63,7 +64,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|int
      */
-    public function handleCreateUser(Request $request)
+    public function handleCreateUser(RegisterRequest $request)
     {
         try {
             $user = User::where('username', $request->username)->orWhere('email', $request->email)->first();

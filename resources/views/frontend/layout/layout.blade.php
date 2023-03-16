@@ -24,8 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
-
-    <title>Index</title>
+    <title>@yield('title')</title>
     <style>
         .w-30 {
             width: 30%;

@@ -27,6 +27,29 @@
     </div>
 
     <script>
-        $('#form-update').validation()
+
+        $('#form-update').validate({
+            rules: {
+                fullname: "required",
+                username: "required",
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                fullname: "Please enter your full name",
+                username: "Please enter your username",
+                password: "Please enter your password",
+                password: "Password has minimum 6 character",
+                email: "Please enter your email",
+                email: "Please enter a valid email address"
+            }
+        });
+    </script>
     </script>
 @endsection

@@ -7,6 +7,9 @@
             <div class="col-lg-8">
                 <!--=== Post Detail ===-->
                 @foreach($postDetail as $post)
+                    @section('title')
+                        {{ $post->title }}
+                    @endsection
                     <div>
                         <img class="img-detail" src="{{ asset('/image/'.$post->image) }}">
                     </div>

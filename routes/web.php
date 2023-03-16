@@ -7,6 +7,7 @@ use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\User\UsersController;
 use App\Http\Controllers\Permission\PermissionsController;
+use App\Http\Controllers\Login\LoginController;
 
 // =====  Front-End  =====
 Route::redirect('/', 'frontend');
@@ -24,11 +25,11 @@ Route::prefix('frontend')->group(function () {
 
 // =====  Back-End  ======
 Route::prefix('backend')->group(function () {
-    Route::post('/login', [AdminController::class, 'handleLogin'])->name('backend.login');
-    Route::get('/login', [AdminController::class, 'formLogin'])->name('backend.loginForm');
-    Route::get('/register', [AdminController::class, 'formRegister'])->name('backend.formRegister');
-    Route::post('/register', [AdminController::class, 'handleRegister'])->name('backend.register');
-    Route::get('/logout', [AdminController::class, 'logout'])->name('backend.logout');
+    Route::post('/login', [LoginController::class, 'handleLogin'])->name('backend.login');
+    Route::get('/login', [LoginController::class, 'formLogin'])->name('backend.loginForm');
+    Route::get('/register', [LoginController::class, 'formRegister'])->name('backend.formRegister');
+    Route::post('/register', [LoginController::class, 'handleRegister'])->name('backend.register');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('backend.logout');
 
 //    Route::middleware('checkLogin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('backend.index');

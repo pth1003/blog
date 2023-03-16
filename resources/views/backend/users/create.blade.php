@@ -11,23 +11,23 @@
         <form class="w-75" method="post" id="form-create">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label fw-bold">FullName</label>
-                <input type="text" class="form-control" id="fullName" name="fullName">
+                <input type="text" class="form-control" id="fullname" name="fullname" value="{{old('fullname')}}">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label fw-bold">Username</label>
-                <input type="text" class="form-control" name="username" id="username">
+                <input type="text" class="form-control" name="username" id="username" value="{{old('username')}}">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label fw-bold">Email</label>
-                <input type="text" class="form-control" id="email" name="email">
+                <input type="text" class="form-control" id="email" name="email" value="{{old('email')}}">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label fw-bold">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control" id="password" name="password" value="{{old('password')}}">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label fw-bold">Retype Password</label>
-                <input type="password" class="form-control" id="rePassword" name="rePassword">
+                <input type="password" class="form-control" id="rePassword" name="rePassword" value="{{old('rePassword')}}">
             </div>
             <div class="d-flex align-items-center">
                 <p class="fw-bold m-0">Select role for user</p>
@@ -41,6 +41,16 @@
             </button>
             @csrf
         </form>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         @if(isset($msg))
             <p style="background-color: #f1d0d0" class="alert-danger p-2 text-danger text-center fw-bold w-50">{{ $msg }}</p>
         @endif
@@ -48,7 +58,7 @@
     <script>
         $('#form-create').validate({
             rules: {
-                fullName: "required",
+                fullname: "required",
                 username: "required",
                 password: {
                     required: true,
@@ -64,7 +74,7 @@
                 }
             },
             messages: {
-                fullName: "Please enter your full name",
+                fullname: "Please enter your full name",
                 username: "Please enter your username",
                 password: "Please enter your password",
                 password: "Password has minimum 6 character",
