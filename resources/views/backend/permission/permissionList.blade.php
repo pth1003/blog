@@ -19,7 +19,7 @@
                 <td>{{ ucfirst($role->name) }}</td>
                 <td>
                     @foreach($role->permissions as $per)
-                        {{ucfirst($per->name) }},
+                        {{ ucfirst($per->name) }}
                     @endforeach
                 </td>
                 <td>

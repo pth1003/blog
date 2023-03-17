@@ -32,6 +32,7 @@
                 <th>Name</th>
                 <th>created_at</th>
                 <th>Edit</th>
+                <th>Post detail</th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +50,11 @@
                         <a onclick="return confirm('Confirm delete post?')"
                            href="{{ route('backend.post.delete', ['id'=>$post->id]) }}">
                             <i class="bi bi-trash2 text-danger"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ route('frontend.detail', ['id'=>$post->id]) }}"
+                           class="text-decoration-none text-black">See
                         </a>
                     </td>
                 </tr>

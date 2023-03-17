@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\CommentReply;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Users;
@@ -35,7 +36,7 @@ class UserController extends Controller
         try {
             $dt = Carbon::now('Asia/Ho_Chi_Minh');
             $newPosts = Post::with('user')->orderByDesc('id')->first();
-            $posts = Post::with('user')->orderByDesc('id')->simplePaginate(5);
+            $posts = Post::with('user')->orderByDesc('id')->where('id', '!=', $newPosts->id)->take(5)->get();
             $postRandom = Post::inRandomOrder()->first();
             $postRandom1 = Post::inRandomOrder()->first();
             $postRandom2 = Post::inRandomOrder()->first();
@@ -62,7 +63,9 @@ class UserController extends Controller
     {
         try {
             if ($request->method() == 'GET') {
-                $comments = Comment::with('user')->where('post_id', $id)->where('status', 1)->get();
+                $comments = Comment::with('user', 'commentReply')->where('post_id', $id)->where('status', 1)->get();
+                $commentReply = CommentReply::where('post_id', $id)->count();
+                $countCmt = $comments->count() + $commentReply;
                 $postDetail = Post::with('user')->where('id', $id)->get();
                 $postRandom = Post::with('user')->inRandomOrder()->first();
                 $idUser = '';
@@ -76,7 +79,7 @@ class UserController extends Controller
                 }
 
                 $relatedPost = Post::with('user')->where('category_id', $idCatRelated)->where('id', '!=', $id)->get();
-                return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost', 'checkUserDeleteUpdate', 'postRandom'));
+                return view('frontend.detail', compact('postDetail', 'comments', 'relatedPost', 'checkUserDeleteUpdate', 'postRandom', 'countCmt', 'id'));
             } else {
                 $dataInsert = [
                     'content' => $request->contentt,
@@ -87,7 +90,6 @@ class UserController extends Controller
                 if ($comment) {
                     echo "<script type='text/javascript'>alert('Comments are pending !!');window.history.back()</script>";
                 }
-
             }
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
@@ -161,8 +163,13 @@ class UserController extends Controller
             return view('frontend.editBlog', compact('category', 'post'));
         } else {
             $file = $request->file('image');
-            $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('image'), $filename);
+            if($file == null) {
+                $filename = $request->img_default;
+            } else {
+                $filename = $file->getClientOriginalName();
+                $file->move(public_path('image'), $filename);
+            }
+
             $dataInsert = [
                 'title' => $request->title,
                 'content' => $request->contentt,
@@ -196,6 +203,19 @@ class UserController extends Controller
     {
         $err = $request->get('msg', 'ERROR');
         return view('frontend.error', compact('err'));
+    }
+
+    public function commentReply(Request $request)
+    {
+        $dataCommentReply = [
+            'content' => $request->contentt,
+            'user_id' => auth()->user()->id,
+            'comment_id' => $request->id_cmt,
+            'post_id' => $request->id_post
+        ];
+
+        CommentReply::create($dataCommentReply);
+        return redirect()->back();
     }
 }
 

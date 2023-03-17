@@ -1,13 +1,20 @@
 @extends('backend.layout')
 <style>
     .error {
-        color:red;
+        color: red;
     }
 </style>
 @section('createUser')
     <p>Dashboard / User</p>
     <div class="d-flex justify-content-center align-items-center flex-column">
         <p><span class="fs-2"><i class="bi bi-plus-circle fs-2 text-success"></i> Create User</span></p>
+        <div class="notification-msg">
+            @if (Session::has('msg'))
+                <div class="alert alert-danger">
+                        <p class="m-0">{{ Session::get('msg') }}</p>
+                </div>
+            @endif
+        </div>
         <form class="w-75" method="post" id="form-create">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label fw-bold">FullName</label>
@@ -27,20 +34,24 @@
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label fw-bold">Retype Password</label>
-                <input type="password" class="form-control" id="rePassword" name="rePassword" value="{{old('rePassword')}}">
+                <input type="password" class="form-control" id="rePassword" name="rePassword"
+                       value="{{old('rePassword')}}">
             </div>
             <div class="d-flex align-items-center">
                 <p class="fw-bold m-0">Select role for user</p>
                 @foreach($roles as $role)
-                    <input type="radio" name="selectRole" value="{{$role->name}}" @if($role->id == 1) checked @endif><span>{{ ucfirst($role->name) }}</span>
+                    <input type="radio" name="selectRole" value="{{$role->name}}" @if($role->id == 1) checked @endif>
+                    <span>{{ ucfirst($role->name) }}</span>
                 @endforeach
             </div>
             <button type="submit" class="btn btn-success w-25 mt-4">Create <i class="bi bi-send"></i></button>
-            <a href="{{ route('backend.listUser') }}" class="btn w-25 bg-dark text-white text-decoration-none mt-4">Back <i
+            <a href="{{ route('backend.listUser') }}" class="btn w-25 bg-dark text-white text-decoration-none mt-4">Back
+                <i
                     class=" bi bi-arrow-return-left"></i></a>
             </button>
             @csrf
         </form>
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -51,9 +62,6 @@
             </div>
         @endif
 
-        @if(isset($msg))
-            <p style="background-color: #f1d0d0" class="alert-danger p-2 text-danger text-center fw-bold w-50">{{ $msg }}</p>
-        @endif
     </div>
     <script>
         $('#form-create').validate({

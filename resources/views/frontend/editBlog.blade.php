@@ -39,7 +39,9 @@
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Select image</label>
-                    <input type="file" name="image" required>
+                    <input type="file" name="image" id="imgInp">
+                    <img id="rvimg" src="{{asset('/image/'.$post['image'])}}"/>
+                    <input type="hidden" value="{{$post['image']}}" name="img_default" />
                 </div>
                 <div class="w-100">
                     <label class="fs-4 fw-bold">Select category</label>
@@ -61,24 +63,31 @@
             rules: {
                 title: "required",
                 contentt: "required",
-                image: {
-                    required: true,
-                    extension: "jpg, jpeg, png"
-                },
+                // image: {
+                //     required: true,
+                //     extension: "jpg, jpeg, png"
+                // },
             },
 
             messages: {
                 title: "Please enter title",
                 contentt: "Please enter content",
-                image: {
-                    required: "Please select image",
-                    extension: "Please select image have type JPG, JPEG, PNG",
-                }
+                // image: {
+                //     required: "Please select image",
+                //     extension: "Please select image have type JPG, JPEG, PNG",
+                // }
             }
         });
 
         ClassicEditor
-            .create( document.querySelector( '#content-ckeditor' ) )
+            .create(document.querySelector('#content-ckeditor'))
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                rvimg.src = URL.createObjectURL(file)
+            }
+        }
     </script>
 @endsection
 

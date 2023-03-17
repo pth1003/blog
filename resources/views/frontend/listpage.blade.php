@@ -58,8 +58,8 @@
                             <p class="card-text">
                                 <small>
                                     <span>{{ $page->user->name }}</span>
-                                    <span>03, Aprile, 2023</span>
-                                    <span>6 Comment</span>
+                                    <i class="bi bi-alarm-fill mbt-2"></i>&nbsp;
+                                    <span>{{ $page->created_at->toDayDateTimeString() }}</span>
                                 </small>
                             </p>
                             <p class="card-text fs-6">

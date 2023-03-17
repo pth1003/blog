@@ -29,7 +29,6 @@ class PermissionsController extends Controller
     {
         if ($request->method() == 'GET') {
             $groupPermission = GroupPermission::with('permissions')->get();
-            $idRole = $id;
             $role = Role::find($id);
 
             $permisions = [];
@@ -37,7 +36,7 @@ class PermissionsController extends Controller
                 $permisions[$permision->id] = $permision;
             }
 
-            return view('backend.permission.permissionEdit', compact('idRole', 'groupPermission', 'role', 'permisions'));
+            return view('backend.permission.permissionEdit', compact('groupPermission', 'role', 'permisions'));
         } else {
             $role = Role::find($id);
             $role->syncPermissions([$request->permission]);

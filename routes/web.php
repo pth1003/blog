@@ -20,6 +20,7 @@ Route::prefix('frontend')->group(function () {
     Route::match(['post', 'get'], '/write', [UserController::class, 'writeBlog'])->name('frontend.write')->middleware('permission:create post');
     Route::match(['post', 'get'], '/edit/{id}', [UserController::class, 'editBlog'])->name('frontend.edit')->middleware('permission:edit post');
     Route::get('/delete/{id}', [UserController::class, 'deleteBlog'])->name('frontend.delete')->middleware('permission:delete post');
+    Route::post('comment-reply', [UserController::class, 'commentReply'])->name('comment-reply');
 });
 
 

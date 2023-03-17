@@ -27,5 +27,11 @@ class Comment extends Model
     public function scopeStatus($query, $state = 1)
     {
         return $query->where('status', $state);
+
+    }
+
+    public function commentReply():HasMany
+    {
+        return $this->hasMany(CommentReply::class);
     }
 }

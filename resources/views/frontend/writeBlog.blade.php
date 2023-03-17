@@ -36,7 +36,8 @@
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Select image</label>
-                    <input type="file" name="image" required>
+                    <input type="file" accept="image/*" name="image" id="imgInp" required>
+                    <img id="rvimg" src=""/>
                 </div>
                 <div class="w-100">
                     <label class="fs-4 fw-bold">Select category</label>
@@ -73,7 +74,14 @@
         });
 
         ClassicEditor
-            .create( document.querySelector( '#content-ckeditor' ) )
+            .create( document.querySelector('#content-ckeditor'))
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                rvimg.src = URL.createObjectURL(file)
+            }
+        }
     </script>
 @endsection
 

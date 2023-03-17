@@ -96,13 +96,13 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-            @foreach($countCommentOfPost as $cmt)
+            @foreach($countCommentOfPost as $post)
                 <tr>
-                    <td>{{$cmt->post->id}}</td>
-                    <td>{{$cmt->post->title}}</td>
-                    <td class="text-center">{{$cmt->totalCmt}}</td>
+                    <td>{{$post->id}}</td>
+                    <td>{{$post->title}}</td>
+                    <td class="text-center">{{$post->comment->count()}}</td>
                     <td class="text-center">
-                        <a href="{{route('backend.comment.detailComment', ['id'=>$cmt->post->id])}}">
+                        <a href="{{route('backend.comment.detailComment', ['id'=>$post->id])}}">
                             <i class="bi bi-eye"></i>
                         </a>
                     </td>

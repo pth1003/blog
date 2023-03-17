@@ -1,6 +1,20 @@
 @extends('frontend.layout.layout')
 <!-- ==== Detail ==== -->
 @section('content')
+    <style>
+        .image img {
+            width: 100%;
+        }
+
+        .form-comment-active {
+            display: none;
+        }
+
+        .active-cmt {
+            display: flex;
+        }
+
+    </style>
     <div class="detail-post container bg-white">
         {{ Breadcrumbs::render('post') }}
         <div class="row">
@@ -42,11 +56,11 @@
 
                 <!--=== Comment  === -->
                 <div class="comment-post p-2">
-                    <p class="fw-bold"><i class="bi bi-chat-fill"></i> Comment ({{ $comments->count() }})</p>
+                    <p class="fw-bold"><i class="bi bi-chat-fill"></i> Comment ({{ $countCmt }})</p>
                     <form method="POST" id="form-comment">
                         @if(isset(Auth::user()->name))
                             <div class="d-flex">
-                                <input type="text" class="w-100 p-1 input-comment" name="contentt"
+                                <input type="text" class="w-100 p-1 input-comment fs-13px" name="contentt"
                                        placeholder="Write comment ..." required/>
                                 <button class="btn btn-sm btn-success" type="submit">Send</button>
                                 @csrf
@@ -55,14 +69,57 @@
                     </form>
                     @foreach($comments as $comment)
                         <div class="user-comment mt">
-                            <div style="font-size: 12px" class="d-flex fw-bold">
-                                <p class="m-0 fs-13px"><i class="bi bi-person"></i> {{ $comment->user->name }} </p>&nbsp;
+                            <div style="font-size: 12px; margin-top: 10px" class="d-flex fw-bold">
+                                <p style="margin-bottom: 0;" class="fs-13px">
+                                    <i class="bi bi-person"></i>
+                                    {{ $comment->user->name }}
+                                </p>&nbsp;
                                 <p class="m-0"><i class="bi bi-alarm"></i>
                                     {{ $comment->created_at->toDayDateTimeString() }}
                                 </p>
                             </div>
-                            <p class="bg-white p-1" style="font-size: 14px">{{ $comment->content }}</p>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-chat-fill fs-13px"></i>
+                                <p class="bg-white m-0" style="font-size: 14px">{{ $comment->content }}</p>
+                                @if(Auth::check())
+                                    <a class="fs-13px reply-cmt text-decoration-none text-success fw-bold">
+                                        &nbsp;Reply <i class="bi bi-reply-fill"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </div>
+
+                        <!-- === Reply comment === -->
+                        <form method="post" action="{{route('comment-reply')}}">
+                            <div class="form-comment-active mb-1">
+                                <input type="text" class="w-100 p-1 input-comment fs-13px" name="contentt"
+                                       placeholder="Write comment reply ..." required/>
+                                <input type="hidden" value="{{$comment->id}}" name="id_cmt"/>
+                                <input type="hidden" value="{{$id}}" name="id_post"/>
+                                <a class="btn btn-sm btn-danger close-from-cmt" type="submit">Cancel</a>
+                                <button class="btn btn-sm btn-success" type="submit">Send</button>
+                                @csrf
+                            </div>
+                        </form>
+                        @foreach($comment->commentReply as $cmtRep)
+                            <div style="margin-left: 40px; margin-bottom: 2px"
+                                 class="user-comment bg-f2 position-relative">
+                                <i style="left: -15px"
+                                   class="bi bi-arrow-90deg-up position-absolute fs-13px text-success fw-bold">
+                                </i>
+                                <div style="font-size: 12px" class="d-flex fw-bold">
+                                    <p class="m-0 fs-13px"><i class="bi bi-person"></i> {{ $cmtRep->user->name }} </p>&nbsp;
+                                    <p class="m-0"><i class="bi bi-alarm"></i>
+                                        {{ $cmtRep->created_at->toDayDateTimeString() }}
+                                    </p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-chat-fill fs-13px"></i>
+                                    <p class="m-0" style="font-size: 14px">{{ $cmtRep->content }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                        <!-- === End Reply comment === -->
                     @endforeach
                 </div>
                 <!-- ===End Comment === -->
@@ -123,8 +180,32 @@
             </div>
         </div>
     </div>
+
     <script>
         $('#form-comment').validate();
+
+        var repLyCmts = document.querySelectorAll('.reply-cmt')
+        var fromCmts = document.querySelectorAll('.form-comment-active')
+        var closeFormCmt = document.querySelectorAll('.close-from-cmt')
+
+        repLyCmts.forEach((repLyCmt, index) => {
+            const fromCmt = fromCmts[index]
+
+            repLyCmt.onclick = function () {
+                if (document.querySelector('.form-comment-active.active-cmt')) {
+                    document.querySelector('.form-comment-active.active-cmt').classList.remove('active-cmt')
+                }
+                fromCmt.classList.add('active-cmt')
+            }
+        })
+
+        closeFormCmt.forEach((closeCmt, index) => {
+            const fromCmt = fromCmts[index]
+            closeCmt.onclick = function () {
+                fromCmt.classList.remove('active-cmt')
+            }
+        })
+
     </script>
 @endsection
 

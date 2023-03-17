@@ -11,9 +11,15 @@
                 </div>
                 <div class="w-100 mb-4">
                     <label class="fs-4 fw-bold">Content</label>
-                    <textarea rows="10" class="w-100 text-area-blog" name="contentt"
-                              required>{{$post['content'] }}</textarea>
+                    <textarea rows="10" class="w-100 text-area-blog" name="contentt" id="content-ckeditor"
+                              required>
+                        {{$post['content'] }}
+                    </textarea>
                 </div>
+                <label class="fs-4 fw-bold">Select image</label>
+                <input type="file" name="image" id="imgInp">
+                <img id="rvimg" src="{{asset('/image/'.$post['image'])}}" width="70%"/>
+                <input type="hidden" value="{{$post['image']}}" name="img_default" />
                 <div class="w-100">
                     <label class="fs-4 fw-bold">Select category</label>
                     <select name="category">
@@ -29,5 +35,16 @@
             @csrf
         </form>
     </div>
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                rvimg.src = URL.createObjectURL(file)
+            }
+        }
+
+        ClassicEditor
+            .create(document.querySelector('#content-ckeditor'))
+    </script>
 @endsection
 

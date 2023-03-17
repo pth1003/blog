@@ -57,7 +57,7 @@
                                         <span class="d-flex align-items-center mr-1"><i class="bi bi-person-fill"></i>&nbsp;{{ $post->user->name }}</span>
                                         <span class="d-flex align-items-center mr-1">
                                             <i class="bi bi-alarm-fill mbt-2"></i>&nbsp;
-                                            {{ $post->created_at-> toDayDateTimeString() }}
+                                            {{ $post->created_at->toDayDateTimeString() }}
                                         </span>
                                         <span class="d-flex align-items-center"><i class="bi bi-chat-dots-fill"></i>&nbsp;0</span>
                                     </small>
@@ -75,12 +75,17 @@
                     <div class="bg-black text-light fw-bold m-2 p-1 pdr mr">Suggesst</div>
                     <div class="text-light fw-bold">
                         <div class="d-flex flex-column m-1 position-relative">
-                            <div class="img-card">
-                                <img class="m-1" src="{{asset('/image/'.$postRandom['image'])}}" alt="Card image cap"
-                                     width="100%" height="240px">
-                            </div>
+                            <a href="{{ route('frontend.detail', ['id'=>$postRandom->id]) }}">
+                                <div class="img-card">
+                                    <img class="m-1" src="{{asset('/image/'.$postRandom['image'])}}"
+                                         alt="Card image cap"
+                                         width="100%" height="240px">
+                                </div>
+                            </a>
                             <div class="mt mb text-black">
-                                <h5 class="card-title fw-bold text-black">{{ $postRandom['title'] }}</h5>
+                                <a class="text-decoration-none" href="{{ route('frontend.detail', ['id'=>$postRandom->id]) }}">
+                                    <h5 class="card-title fw-bold text-black">{{ $postRandom['title'] }}</h5>
+                                </a>
                                 <p class="text-black">
                                     <small>
                                         <span>Mr.Hau</span>
@@ -115,14 +120,6 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
-                <style>
-                    .pagination svg {
-                        width: 20px;
-                    }
-                </style>
-                <div class="pagination">
-                    {!! $posts->links() !!}
                 </div>
             </div>
         </div>

@@ -3,7 +3,9 @@
     <p>Dashboard / User</p>
     <div class="d-flex align-items-center justify-content-between">
         <h5 class="fw-bold m-0"><i class="bi bi-people fs-2 text-success"></i> Users list</h5>
-        <a href="{{ route('backend.createUser') }}" class="btn btn-success text-decoration-none "><i class="bi bi-plus-lg"></i> New User</a>
+        <a href="{{ route('backend.createUser') }}" class="btn btn-success text-decoration-none ">
+            <i class="bi bi-plus-lg"></i> New User
+        </a>
     </div>
     <div class="posts container-fluid bg-white mt-1">
         <table class="table fs-13px">
@@ -26,8 +28,14 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at->toDayDateTimeString() }}</td>
                     <td>
-                        <a class="" href="{{ route('backend.editUser', ['id'=>$user->id]) }}"><i class="bi bi-pencil text-success"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a onclick="return confirm('Confirm delete user?')" class="" href="{{ route('backend.deleteUser', ['id'=>$user->id]) }}"> <i class="bi bi-trash2 text-danger"></i></a>
+                        <a class="text-white btn btn-sm btn-warning"
+                           href="{{ route('backend.editUser', ['id'=>$user->id]) }}">
+                            <i class="bi bi-pencil-fill text-white"></i>
+                        </a>
+                        <a onclick="return confirm('Do you want delete user?')" class="text-white btn btn-sm btn-danger"
+                           href="{{ route('backend.deleteUser', ['id'=>$user->id]) }}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -35,3 +43,5 @@
         </table>
     </div>
 @endsection
+
+

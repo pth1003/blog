@@ -47,10 +47,18 @@ class PostController extends Controller
             $categoty = Category::all();
             return view('backend.post.edit', compact('post', 'categoty', 'idCat'));
         } else {
+            $file = $request->file('image');
+            if($file == null) {
+                $filename = $request->img_default;
+            } else {
+                $filename = $file->getClientOriginalName();
+                $file->move(public_path('image'), $filename);
+            }
             $dataEdit = [
                 'title' => $request->title,
                 'content' => $request->contentt,
-                'category_id' => $request->category
+                'image' => $filename,
+                'category_id' => $request->category,
             ];
 
             Post::where('id', $id)->update($dataEdit);

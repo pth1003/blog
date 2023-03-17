@@ -66,9 +66,8 @@ class LoginController extends Controller
                     return redirect()->route('backend.index');
                 }
                 return redirect()->route('frontend.index');
-            } else {
-                return view('backend.login')->with('msg', 'Username or password is incorrect');
             }
+            return view('backend.login')->with('msg', 'Username or password is incorrect');
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
             return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);

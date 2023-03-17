@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\User;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -8,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+
 class UsersController extends Controller
 {
 
@@ -67,24 +69,25 @@ class UsersController extends Controller
     public function handleCreateUser(RegisterRequest $request)
     {
         try {
-            $user = User::where('username', $request->username)->orWhere('email', $request->email)->first();
-            if ($user != null) {
-                return view('backend.users.create')->with('msg', 'Username or email already exists');
+            $checkUsername = User::where('username', $request->username)->first();
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkUsername != null || $checkEmail != null) {
+                return redirect()->back()->with('msg', 'Username or password already exits');
+            } else {
+                $dataInsert = [
+                    'name' => $request->fullname,
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'email' => $request->email,
+                    'isAd' => $request->selectRole != 'user' ? 1 : 0
+                ];
+
+                $user = User::create($dataInsert);
+                $userId = User::find($user->id);
+                $nameRole = $request->selectRole;
+                $userId->assignRole($nameRole);
+                return redirect()->route('backend.listUser');
             }
-            $dataInsert = [
-                'name' => $request->fullName,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-                'isAd' => $request->selectRole != 'user' ? 1 : 0
-            ];
-
-            $user = User::create($dataInsert);
-
-            $userId = User::find($user->id);
-            $nameRole = $request->selectRole;
-            $userId->assignRole($nameRole);
-            return redirect()->route('backend.listUser');
         } catch (\Exception $e) {
             Log::error($e->getTraceAsString());
             return redirect()->route('frontend.error', ['msg' => $e->getMessage()]);
